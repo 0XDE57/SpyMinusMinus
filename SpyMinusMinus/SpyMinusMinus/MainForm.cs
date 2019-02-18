@@ -22,8 +22,11 @@ namespace SpyMinusMinus {
         }
 
         private void EmbedWindowTree() {
-            TreeForm tree = new TreeForm(panelMain);          
-            tree.Show();
+            new TreeForm(panelMain).Show();
+        }
+
+        private void windowsToolStripMenuItem_Click(object sender, EventArgs e) {
+            new TreeForm(panelMain).Show();
         }
     }
 }

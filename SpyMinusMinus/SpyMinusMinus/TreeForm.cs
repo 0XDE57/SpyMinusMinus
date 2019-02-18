@@ -6,36 +6,38 @@ using System.Drawing;
 
 namespace SpyMinusMinus {
     public partial class TreeForm : Form {
-
+        /*
+         *  TODO:
+         *      [ ] desktop window -> GetDesktopWindow
+         *      [...] tree options
+         *          [x] auto refresh
+         *          [x] refresh rate
+         *          [...] history (red removed, green added)
+         *          [...] view handles as int, hex, both
+         *              [ ] view hex upper or lower case
+         *      [ ] sort: ascending/descending
+         *      [ ] move options to properties
+         *      
+         */
         private Panel parentPanel;
 
         private List<VirtualWindow> windowHandles;
         private List<VirtualWindow> previousHandles;
         private Timer autoRefreshTimer;
 
-        //TODO: move values to config
+        
         private bool autoRefresh = true;
         private bool showHistory = true;
-        private int refreshInterval = 2000;
         public static int markedTime = 5000;
         public static Color newColor = Color.LightGreen;
         public static Color deadColor = Color.MediumVioletRed;
-
-        
+     
         public TreeForm(Panel parent) {
             InitializeComponent();
-            this.parentPanel = parent;
+            parentPanel = parent;
             Embed();
-            /*
-             *  TODO:
-             *      [ ] desktop window -> GetDesktopWindow
-             *      [...] tree options
-             *          [...] auto refresh, refresh rate, history (red removed, green added)
-             *          [ ] view handles as int, hex, both
-             *          [ ] view hex upper or lower case
-             *      [ ] sort: ascending/descending
-             *              
-            */
+
+            showHistoryToolStripMenuItem.Checked = showHistory;
         }
 
         private void TreeForm_Load(object sender, EventArgs e) {
@@ -47,22 +49,18 @@ namespace SpyMinusMinus {
 
             //windowHandles.Sort();
             //windowHandles.ForEach(window => Console.WriteLine(window.ToString()));
+
+            autoRefreshTimer = new Timer();
+            autoRefreshTimer.Tick += RefreshNodes;
             if (autoRefresh) {
-                autoRefreshTimer = new Timer();
-                autoRefreshTimer.Interval = refreshInterval;
-                autoRefreshTimer.Tick += RefreshNodes;
-                autoRefreshTimer.Start();
+                toolStripMenuItemUpdate2000.PerformClick();
             }
         }
 
- 
-        private void EnumerateWindows() {
-            windowHandles.Clear();
-            NativeMethods.EnumWindows(new NativeMethods.EnumWindowProc(EnumWindow), IntPtr.Zero);
-        }
-
+        #region window management
         private void PopulateNodes() {
             var time = DateTime.Now;
+            
             treeViewWindowList.SuspendLayout();
 
             treeViewWindowList.Nodes.Clear();
@@ -75,24 +73,9 @@ namespace SpyMinusMinus {
             Console.WriteLine(DateTime.Now.Subtract(time).Milliseconds);
         }
 
-
-        private bool EnumWindow(IntPtr hWnd, IntPtr lParam) {
-            windowHandles.Add(new VirtualWindow(hWnd));
-            return true; //continue enumeration
-        }
-
-        private void treeViewWindowList_BeforeExpand(object sender, TreeViewCancelEventArgs e) {;
-            if (e.Node != null) {
-                (e.Node as WindowNode).PopulateChildrensChildren();
-            }
-        }
-
-        private void testToolStripMenuItemRefresh_Click(object sender, EventArgs e) {
-            RefreshNodes(sender, e);
-        }
-
-        private void RefreshNodes(object sender, EventArgs e) {
+        private void RefreshNodes(object sender, EventArgs e) {         
             var time = DateTime.Now;
+            Text = "Windows - " + time.ToLongTimeString();
             treeViewWindowList.SuspendLayout();
 
             previousHandles.Clear();
@@ -109,7 +92,7 @@ namespace SpyMinusMinus {
                 treeViewWindowList.Nodes.Add(newNode);
             });
 
-            
+
             //old nodes
             previousHandles.Where(w => !windowHandles.Contains(w)).ToList().ForEach(w => {
                 foreach (WindowNode searchNode in treeViewWindowList.Nodes) {
@@ -124,7 +107,7 @@ namespace SpyMinusMinus {
                 }
             });
 
-            
+
             foreach (WindowNode node in treeViewWindowList.Nodes) {
                 if (node.IsSelected || node.IsExpanded) {
                     //node.PopulateChildrensChildren();
@@ -139,6 +122,44 @@ namespace SpyMinusMinus {
             Console.WriteLine(DateTime.Now.Subtract(time).Milliseconds);
         }
 
+        private void EnumerateWindows() {
+            windowHandles.Clear();
+            NativeMethods.EnumWindows(new NativeMethods.EnumWindowProc(EnumWindow), IntPtr.Zero);
+        }
+
+        private bool EnumWindow(IntPtr hWnd, IntPtr lParam) {
+            windowHandles.Add(new VirtualWindow(hWnd));
+            return true; //continue enumeration
+        }
+
+        private void PopOut() {
+            //pop out into external window
+            Parent.Controls.Remove(this);
+            TopLevel = true;
+
+            popoutToolStripMenuItem.Text = "Dock";
+        }
+
+        private void Embed() {
+            //embed form inside main panel
+            TopLevel = false;
+            parentPanel.Controls.Add(this);
+
+            popoutToolStripMenuItem.Text = "Popout";
+        }
+        #endregion
+
+        #region tool strip Options
+        private void treeViewWindowList_BeforeExpand(object sender, TreeViewCancelEventArgs e) {;
+            if (e.Node != null) {
+                (e.Node as WindowNode).PopulateChildrensChildren();
+            }
+        }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
+            RefreshNodes(sender, e);
+        }
+
         private void popoutToolStripMenuItem_Click(object sender, EventArgs e) {
             if (TopLevel) {
                 Embed();
@@ -147,97 +168,88 @@ namespace SpyMinusMinus {
             }
         }
 
-        private void PopOut() {
-            //pop out into external window
-            Parent.Controls.Remove(this);
-            TopLevel = true;
-            popoutToolStripMenuItem.Text = "Dock";
+        private void showHistoryToolStripMenuItem_Click(object sender, EventArgs e) {
+            showHistory = !showHistory;
+            showHistoryToolStripMenuItem.Checked = showHistory;
         }
 
-        private void Embed() {
-            //embed form inside main panel
-            TopLevel = false;
-            parentPanel.Controls.Add(this);
-            popoutToolStripMenuItem.Text = "Popout";
+        #region autoRefresh
+        private void disableAutoToolStripMenuItem_Click(object sender, EventArgs e) {
+            autoRefreshTimer.Stop();
+
+            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
+                if (item is ToolStripMenuItem)
+                    (item as ToolStripMenuItem).Checked = false;
+            }
+            disableAutoToolStripMenuItem.Checked = true;
+        }
+
+        private void toolStripMenuItemUpdate500_Click(object sender, EventArgs e) {
+            autoRefreshTimer.Interval = 500;
+            autoRefreshTimer.Start();
+                  
+            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
+                if (item is ToolStripMenuItem)
+                    (item as ToolStripMenuItem).Checked = false;
+            }
+            toolStripMenuItemUpdate500.Checked = true;
+        }
+
+        private void toolStripMenuItemUpdate1000_Click(object sender, EventArgs e) {
+            autoRefreshTimer.Interval = 1000;
+            autoRefreshTimer.Start();
+
+            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
+                if (item is ToolStripMenuItem)
+                    (item as ToolStripMenuItem).Checked = false;
+            }
+            toolStripMenuItemUpdate1000.Checked = true;
+        }
+
+        private void toolStripMenuItemUpdate2000_Click(object sender, EventArgs e) {
+            autoRefreshTimer.Interval = 2000;
+            autoRefreshTimer.Start();
+
+            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
+                if (item is ToolStripMenuItem)
+                    (item as ToolStripMenuItem).Checked = false;
+            }
+            toolStripMenuItemUpdate2000.Checked = true;
+        }
+
+        private void toolStripMenuItemUpdate5000_Click(object sender, EventArgs e) {
+            autoRefreshTimer.Interval = 5000;
+            autoRefreshTimer.Start();
+
+
+            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
+                if (item is ToolStripMenuItem)
+                    (item as ToolStripMenuItem).Checked = false;
+            }
+            toolStripMenuItemUpdate5000.Checked = true;
+        }
+
+        private void toolStripMenuItemUpdate10000_Click(object sender, EventArgs e) {
+            autoRefreshTimer.Interval = 10000;
+            autoRefreshTimer.Start();
+
+            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
+                if (item is ToolStripMenuItem)
+                    (item as ToolStripMenuItem).Checked = false;
+            }
+            toolStripMenuItemUpdate10000.Checked = true;
+        }
+        #endregion
+        #endregion
+
+        private void TreeForm_FormClosed(object sender, FormClosedEventArgs e) {
+            autoRefreshTimer.Dispose();
+            Dispose();
+        }
+
+        private void lowerCaseToolStripMenuItem_Click(object sender, EventArgs e) {
+
         }
     }
 
-    class WindowNode : TreeNode {
-
-        private Timer markedTimer;
-        private VirtualWindow window;//the window this node is mapped to
-
-        public WindowNode(VirtualWindow window) {
-            this.window = window;
-            Text = window.ToString();         
-        }
-
-        public WindowNode(VirtualWindow window, bool populateChildren) : this(window) {
-            if (populateChildren)
-                PopulateChildNodes();
-        }
-
-        public VirtualWindow GetWindow() {
-            return window;
-        }
-
-        internal void RefreshText() {
-            Text = window.ToString();
-            //Console.WriteLine(Text);
-        }
-
-        public void PopulateChildNodes() {
-            window.PopulateChildren();
-            //Nodes.Clear();
-            foreach (VirtualWindow child in window.children.ToArray()) {             
-                TreeNode childNode = new WindowNode(child);
-                Nodes.Add(childNode);
-            }
-        }
-
-        public void PopulateChildrensChildren() {
-            foreach (WindowNode child in Nodes) {
-                child.PopulateChildNodes();
-            }
-        }
-
-        internal void MarkNew() {
-            markedTimer = new Timer();
-            markedTimer.Tick += UnMark;
-            markedTimer.Interval = TreeForm.markedTime;
-            markedTimer.Start();
-            BackColor = TreeForm.newColor;
-        }
-
-        internal void MarkDead() {
-            markedTimer = new Timer();
-            markedTimer.Tick += (o, e) => Remove();
-            markedTimer.Interval = TreeForm.markedTime;
-            markedTimer.Start();
-            BackColor = TreeForm.deadColor;
-        }
-
-
-        internal void UnMark(object sender, EventArgs e) {
-            BackColor = Color.White;
-        }
-
-
-        public override bool Equals(object obj) {
-            if (obj == null) return false;
-
-            if (obj is WindowNode) {
-                return (obj as WindowNode).window.Equals(window);
-            } else if (obj is VirtualWindow) {
-                return (obj as VirtualWindow).Equals(window);
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode() {
-            return window.GetHashCode();
-        }
-
-    }
 }
