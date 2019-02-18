@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 
 namespace SpyMinusMinus {
-    class VirtualWindow {
+    class VirtualWindow : IComparable {
 
         public IntPtr handle;
         public IntPtr parentHandle;
@@ -39,10 +39,6 @@ namespace SpyMinusMinus {
         public void PopulateChildren() {
             children = new ArrayList();
             NativeMethods.EnumChildWindows(handle, new NativeMethods.EnumWindowProc(EnumChildWindow), handle);
-
-            foreach (VirtualWindow child in children) {
-                //Console.WriteLine("\t" + child.ToString());
-            }
         }
 
         private bool EnumChildWindow(IntPtr hWnd, IntPtr lParam) {
@@ -51,8 +47,28 @@ namespace SpyMinusMinus {
             return true; //continue enumeration
         }
 
+        public override bool Equals(object obj) {
+            if (obj == null)
+                return false;
+
+            if (obj is VirtualWindow)
+                return (obj as VirtualWindow).handle == handle;       
+
+            return false;
+        }
+
+        public int CompareTo(object obj) {
+            return ((int)handle - (int)(obj as VirtualWindow).handle);
+        }
+
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
+
         public override string ToString() {
             return handle.ToString("x8") + " \"" + GetWindowText + "\" " + GetWindowClass;
         }
+
+      
     }
 }

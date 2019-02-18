@@ -29,7 +29,8 @@
             this.tesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.testToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.testToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.testToolStripMenuItemRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.popoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripTreeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,7 +49,8 @@
             // 
             this.menuStripTreeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.testToolStripMenuItem,
-            this.testToolStripMenuItem1});
+            this.testToolStripMenuItemRefresh,
+            this.popoutToolStripMenuItem});
             this.menuStripTreeMenu.Location = new System.Drawing.Point(0, 0);
             this.menuStripTreeMenu.Name = "menuStripTreeMenu";
             this.menuStripTreeMenu.Size = new System.Drawing.Size(394, 24);
@@ -67,7 +69,7 @@
             // tesToolStripMenuItem
             // 
             this.tesToolStripMenuItem.Name = "tesToolStripMenuItem";
-            this.tesToolStripMenuItem.Size = new System.Drawing.Size(89, 22);
+            this.tesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.tesToolStripMenuItem.Text = "tes";
             // 
             // tesToolStripMenuItem1
@@ -75,20 +77,28 @@
             this.tesToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.testToolStripMenuItem2});
             this.tesToolStripMenuItem1.Name = "tesToolStripMenuItem1";
-            this.tesToolStripMenuItem1.Size = new System.Drawing.Size(89, 22);
+            this.tesToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.tesToolStripMenuItem1.Text = "tes";
             // 
             // testToolStripMenuItem2
             // 
             this.testToolStripMenuItem2.Name = "testToolStripMenuItem2";
-            this.testToolStripMenuItem2.Size = new System.Drawing.Size(93, 22);
+            this.testToolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
             this.testToolStripMenuItem2.Text = "test";
             // 
-            // testToolStripMenuItem1
+            // testToolStripMenuItemRefresh
             // 
-            this.testToolStripMenuItem1.Name = "testToolStripMenuItem1";
-            this.testToolStripMenuItem1.Size = new System.Drawing.Size(38, 20);
-            this.testToolStripMenuItem1.Text = "test";
+            this.testToolStripMenuItemRefresh.Name = "testToolStripMenuItemRefresh";
+            this.testToolStripMenuItemRefresh.Size = new System.Drawing.Size(58, 20);
+            this.testToolStripMenuItemRefresh.Text = "Refresh";
+            this.testToolStripMenuItemRefresh.Click += new System.EventHandler(this.testToolStripMenuItemRefresh_Click);
+            // 
+            // popoutToolStripMenuItem
+            // 
+            this.popoutToolStripMenuItem.Name = "popoutToolStripMenuItem";
+            this.popoutToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.popoutToolStripMenuItem.Text = "Popout";
+            this.popoutToolStripMenuItem.Click += new System.EventHandler(this.popoutToolStripMenuItem_Click);
             // 
             // TreeForm
             // 
@@ -115,6 +125,7 @@
         private System.Windows.Forms.ToolStripMenuItem tesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tesToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItemRefresh;
+        private System.Windows.Forms.ToolStripMenuItem popoutToolStripMenuItem;
     }
 }

@@ -22,10 +22,7 @@ namespace SpyMinusMinus {
         }
 
         private void EmbedWindowTree() {
-            TreeForm tree = new TreeForm();
-            //embed form inside main window
-            tree.TopLevel = false;
-            panelMain.Controls.Add(tree);
+            TreeForm tree = new TreeForm(panelMain);          
             tree.Show();
         }
     }
