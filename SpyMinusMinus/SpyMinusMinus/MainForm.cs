@@ -11,22 +11,24 @@ using System.Windows.Forms;
 
 namespace SpyMinusMinus {
     public partial class MainForm : Form {
-     
+    
 
         public MainForm() {
             InitializeComponent();
         }
 
-        private void MainForm_Load(object sender, EventArgs e) {
+        private void MainForm_Shown(object sender, EventArgs e) {
             EmbedWindowTree();
         }
+
 
         private void EmbedWindowTree() {
             new TreeForm(panelMain).Show();
         }
 
-        private void windowsToolStripMenuItem_Click(object sender, EventArgs e) {
-            new TreeForm(panelMain).Show();
+        private void menuItemWindows_Click(object sender, EventArgs e) {
+            EmbedWindowTree();
         }
+        
     }
 }

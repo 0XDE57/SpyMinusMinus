@@ -6,19 +6,7 @@ using System.Drawing;
 
 namespace SpyMinusMinus {
     public partial class TreeForm : Form {
-        /*
-         *  TODO:
-         *      [ ] desktop window -> GetDesktopWindow
-         *      [...] tree options
-         *          [x] auto refresh
-         *          [x] refresh rate
-         *          [...] history (red removed, green added)
-         *          [...] view handles as int, hex, both
-         *              [ ] view hex upper or lower case
-         *      [ ] sort: ascending/descending
-         *      [ ] move options to properties
-         *      
-         */
+        
         private Panel parentPanel;
 
         private List<VirtualWindow> windowHandles;
@@ -74,8 +62,7 @@ namespace SpyMinusMinus {
         }
 
         private void RefreshNodes(object sender, EventArgs e) {         
-            var time = DateTime.Now;
-            Text = "Windows - " + time.ToLongTimeString();
+            var time = DateTime.Now;            
             treeViewWindowList.SuspendLayout();
 
             previousHandles.Clear();
@@ -119,7 +106,9 @@ namespace SpyMinusMinus {
 
             treeViewWindowList.ResumeLayout();
 
-            Console.WriteLine(DateTime.Now.Subtract(time).Milliseconds);
+            //Console.WriteLine(DateTime.Now.Subtract(time).Milliseconds);
+
+            Text = "Windows (" + windowHandles.Count + ") - " + time.ToLongTimeString();
         }
 
         private void EnumerateWindows() {
@@ -145,7 +134,11 @@ namespace SpyMinusMinus {
             TopLevel = false;
             parentPanel.Controls.Add(this);
 
-            popoutToolStripMenuItem.Text = "Popout";
+            //keep within parent
+            if (Location.X < 0) Location = new Point(0, Location.Y);
+            if (Location.Y < 0) Location = new Point(Location.X, 0);
+
+            popoutToolStripMenuItem.Text = "Pop out";
         }
         #endregion
 
@@ -156,8 +149,14 @@ namespace SpyMinusMinus {
             }
         }
 
-        private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
-            RefreshNodes(sender, e);
+        private void showHistoryToolStripMenuItem_Click(object sender, EventArgs e) {
+            showHistory = !showHistory;
+            showHistoryToolStripMenuItem.Checked = showHistory;
+        }
+
+        private void treeViewWindowList_DoubleClick(object sender, EventArgs e) {
+            var selected = treeViewWindowList.SelectedNode;
+            new PropertiesForm(((WindowNode)selected).GetWindow()).Show();
         }
 
         private void popoutToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -168,9 +167,8 @@ namespace SpyMinusMinus {
             }
         }
 
-        private void showHistoryToolStripMenuItem_Click(object sender, EventArgs e) {
-            showHistory = !showHistory;
-            showHistoryToolStripMenuItem.Checked = showHistory;
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
+            RefreshNodes(sender, e);
         }
 
         #region autoRefresh
@@ -247,9 +245,8 @@ namespace SpyMinusMinus {
             Dispose();
         }
 
-        private void lowerCaseToolStripMenuItem_Click(object sender, EventArgs e) {
+        
 
-        }
     }
 
 }

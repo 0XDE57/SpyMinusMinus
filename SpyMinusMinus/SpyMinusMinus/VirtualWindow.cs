@@ -3,7 +3,7 @@ using System.Collections;
 using System.Text;
 
 namespace SpyMinusMinus {
-    class VirtualWindow : IComparable {
+    public class VirtualWindow : IComparable {
 
         public IntPtr handle;
         public IntPtr parentHandle;

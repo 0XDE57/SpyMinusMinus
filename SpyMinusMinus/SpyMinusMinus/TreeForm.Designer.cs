@@ -34,15 +34,9 @@
             this.toolStripMenuItemUpdate2000 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemUpdate5000 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemUpdate10000 = new System.Windows.Forms.ToolStripMenuItem();
-            this.testToolStripMenuItemRefresh = new System.Windows.Forms.ToolStripMenuItem();
-            this.popoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.displayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.integerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.hexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.upperCaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lowerCaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bothToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.popoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripTreeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,12 +50,13 @@
             this.treeViewWindowList.Size = new System.Drawing.Size(394, 473);
             this.treeViewWindowList.TabIndex = 1;
             this.treeViewWindowList.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewWindowList_BeforeExpand);
+            this.treeViewWindowList.DoubleClick += new System.EventHandler(this.treeViewWindowList_DoubleClick);
             // 
             // menuStripTreeMenu
             // 
             this.menuStripTreeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.testToolStripMenuItem,
-            this.testToolStripMenuItemRefresh,
+            this.refreshToolStripMenuItem,
             this.popoutToolStripMenuItem});
             this.menuStripTreeMenu.Location = new System.Drawing.Point(0, 0);
             this.menuStripTreeMenu.Name = "menuStripTreeMenu";
@@ -73,8 +68,7 @@
             // 
             this.testToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.updateRateToolStripMenuItem,
-            this.showHistoryToolStripMenuItem,
-            this.displayToolStripMenuItem});
+            this.showHistoryToolStripMenuItem});
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.testToolStripMenuItem.Text = "Settings";
@@ -96,63 +90,49 @@
             // disableAutoToolStripMenuItem
             // 
             this.disableAutoToolStripMenuItem.Name = "disableAutoToolStripMenuItem";
-            this.disableAutoToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.disableAutoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.disableAutoToolStripMenuItem.Text = "Disable auto";
             this.disableAutoToolStripMenuItem.Click += new System.EventHandler(this.disableAutoToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(136, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // toolStripMenuItemUpdate500
             // 
             this.toolStripMenuItemUpdate500.Name = "toolStripMenuItemUpdate500";
-            this.toolStripMenuItemUpdate500.Size = new System.Drawing.Size(139, 22);
+            this.toolStripMenuItemUpdate500.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate500.Text = "500";
             this.toolStripMenuItemUpdate500.Click += new System.EventHandler(this.toolStripMenuItemUpdate500_Click);
             // 
             // toolStripMenuItemUpdate1000
             // 
             this.toolStripMenuItemUpdate1000.Name = "toolStripMenuItemUpdate1000";
-            this.toolStripMenuItemUpdate1000.Size = new System.Drawing.Size(139, 22);
+            this.toolStripMenuItemUpdate1000.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate1000.Text = "1000";
             this.toolStripMenuItemUpdate1000.Click += new System.EventHandler(this.toolStripMenuItemUpdate1000_Click);
             // 
             // toolStripMenuItemUpdate2000
             // 
             this.toolStripMenuItemUpdate2000.Name = "toolStripMenuItemUpdate2000";
-            this.toolStripMenuItemUpdate2000.Size = new System.Drawing.Size(139, 22);
+            this.toolStripMenuItemUpdate2000.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate2000.Text = "2000";
             this.toolStripMenuItemUpdate2000.Click += new System.EventHandler(this.toolStripMenuItemUpdate2000_Click);
             // 
             // toolStripMenuItemUpdate5000
             // 
             this.toolStripMenuItemUpdate5000.Name = "toolStripMenuItemUpdate5000";
-            this.toolStripMenuItemUpdate5000.Size = new System.Drawing.Size(139, 22);
+            this.toolStripMenuItemUpdate5000.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate5000.Text = "5000";
             this.toolStripMenuItemUpdate5000.Click += new System.EventHandler(this.toolStripMenuItemUpdate5000_Click);
             // 
             // toolStripMenuItemUpdate10000
             // 
             this.toolStripMenuItemUpdate10000.Name = "toolStripMenuItemUpdate10000";
-            this.toolStripMenuItemUpdate10000.Size = new System.Drawing.Size(139, 22);
+            this.toolStripMenuItemUpdate10000.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate10000.Text = "10000";
             this.toolStripMenuItemUpdate10000.Click += new System.EventHandler(this.toolStripMenuItemUpdate10000_Click);
-            // 
-            // testToolStripMenuItemRefresh
-            // 
-            this.testToolStripMenuItemRefresh.Name = "testToolStripMenuItemRefresh";
-            this.testToolStripMenuItemRefresh.Size = new System.Drawing.Size(58, 20);
-            this.testToolStripMenuItemRefresh.Text = "Refresh";
-            this.testToolStripMenuItemRefresh.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
-            // 
-            // popoutToolStripMenuItem
-            // 
-            this.popoutToolStripMenuItem.Name = "popoutToolStripMenuItem";
-            this.popoutToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
-            this.popoutToolStripMenuItem.Text = "Popout";
-            this.popoutToolStripMenuItem.Click += new System.EventHandler(this.popoutToolStripMenuItem_Click);
             // 
             // showHistoryToolStripMenuItem
             // 
@@ -161,49 +141,28 @@
             this.showHistoryToolStripMenuItem.Text = "Show History";
             this.showHistoryToolStripMenuItem.Click += new System.EventHandler(this.showHistoryToolStripMenuItem_Click);
             // 
-            // displayToolStripMenuItem
+            // refreshToolStripMenuItem
             // 
-            this.displayToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.integerToolStripMenuItem,
-            this.hexToolStripMenuItem,
-            this.bothToolStripMenuItem});
-            this.displayToolStripMenuItem.Name = "displayToolStripMenuItem";
-            this.displayToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.displayToolStripMenuItem.Text = "Handle Display";
+            this.refreshToolStripMenuItem.AutoToolTip = true;
+            this.refreshToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refreshToolStripMenuItem.Image = global::SpyMinusMinus.Properties.Resources.arrow_circle_double;
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(28, 20);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.ToolTipText = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
-            // integerToolStripMenuItem
+            // popoutToolStripMenuItem
             // 
-            this.integerToolStripMenuItem.Name = "integerToolStripMenuItem";
-            this.integerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.integerToolStripMenuItem.Text = "Integer";
-            // 
-            // hexToolStripMenuItem
-            // 
-            this.hexToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.upperCaseToolStripMenuItem,
-            this.lowerCaseToolStripMenuItem});
-            this.hexToolStripMenuItem.Name = "hexToolStripMenuItem";
-            this.hexToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.hexToolStripMenuItem.Text = "Hex";
-            // 
-            // upperCaseToolStripMenuItem
-            // 
-            this.upperCaseToolStripMenuItem.Name = "upperCaseToolStripMenuItem";
-            this.upperCaseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.upperCaseToolStripMenuItem.Text = "Upper case";
-            // 
-            // lowerCaseToolStripMenuItem
-            // 
-            this.lowerCaseToolStripMenuItem.Name = "lowerCaseToolStripMenuItem";
-            this.lowerCaseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.lowerCaseToolStripMenuItem.Text = "Lower case";
-            this.lowerCaseToolStripMenuItem.Click += new System.EventHandler(this.lowerCaseToolStripMenuItem_Click);
-            // 
-            // bothToolStripMenuItem
-            // 
-            this.bothToolStripMenuItem.Name = "bothToolStripMenuItem";
-            this.bothToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.bothToolStripMenuItem.Text = "Both";
+            this.popoutToolStripMenuItem.AutoToolTip = true;
+            this.popoutToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.popoutToolStripMenuItem.Image = global::SpyMinusMinus.Properties.Resources.applications_blue;
+            this.popoutToolStripMenuItem.Name = "popoutToolStripMenuItem";
+            this.popoutToolStripMenuItem.Size = new System.Drawing.Size(28, 20);
+            this.popoutToolStripMenuItem.Text = "Popout";
+            this.popoutToolStripMenuItem.ToolTipText = "Pop out";
+            this.popoutToolStripMenuItem.Click += new System.EventHandler(this.popoutToolStripMenuItem_Click);
             // 
             // TreeForm
             // 
@@ -228,8 +187,6 @@
         private System.Windows.Forms.TreeView treeViewWindowList;
         private System.Windows.Forms.MenuStrip menuStripTreeMenu;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItemRefresh;
-        private System.Windows.Forms.ToolStripMenuItem popoutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateRateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem disableAutoToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -239,11 +196,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdate5000;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUpdate10000;
         private System.Windows.Forms.ToolStripMenuItem showHistoryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem displayToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem integerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem hexToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem upperCaseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lowerCaseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem bothToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem popoutToolStripMenuItem;
     }
 }

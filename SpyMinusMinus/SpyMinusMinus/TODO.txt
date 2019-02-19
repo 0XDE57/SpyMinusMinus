@@ -1,0 +1,31 @@
+﻿[ ] window tree
+     [ ] desktop window -> GetDesktopWindow
+     [...] tree options
+         [x] auto refresh
+         [x] refresh rate
+         [...] history (red removed, green added)
+             [ ] tree not updated on remove
+             [ ] history needs to applied to child nodes when node expanded
+        
+     [ ] sort: ascending/descending/z
+	 [ ] always on top option
+	 [ ] transparency option
+     
+[...] properties window
+	[ ] display size pos, misc, thread process info, window styles
+	[ ] allow editing
+
+[ ] message log
+	[ ] subclass main windproc and forward messages back to observer
+	[ ] display and log messages
+	[ ] filter
+
+[ ] move options to properties
+	[ ] view handles and process/thread ID's as int, hex, both
+		[ ] hex upper or lower case
+
+[ ] highlighting graphics overlay rectangle
+
+[ ] find window based on mouse position 'Find Window'
+
+[ ] log window

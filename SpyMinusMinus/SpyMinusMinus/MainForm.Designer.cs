@@ -23,33 +23,14 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.mainMenuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.components = new System.ComponentModel.Container();
             this.panelMain = new System.Windows.Forms.Panel();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.windowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
+            this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItemTools = new System.Windows.Forms.MenuItem();
+            this.menuItemWindows = new System.Windows.Forms.MenuItem();
+            this.menuItemHelp = new System.Windows.Forms.MenuItem();
+            this.menuItemAbout = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mainMenuToolStripMenuItem,
-            this.aboutToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(864, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // mainMenuToolStripMenuItem
-            // 
-            this.mainMenuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.windowsToolStripMenuItem});
-            this.mainMenuToolStripMenuItem.Name = "mainMenuToolStripMenuItem";
-            this.mainMenuToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.mainMenuToolStripMenuItem.Text = "Tools";
             // 
             // panelMain
             // 
@@ -58,23 +39,41 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelMain.AutoScroll = true;
             this.panelMain.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panelMain.Location = new System.Drawing.Point(0, 27);
+            this.panelMain.Location = new System.Drawing.Point(0, -2);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(864, 580);
+            this.panelMain.Size = new System.Drawing.Size(864, 609);
             this.panelMain.TabIndex = 1;
             // 
-            // aboutToolStripMenuItem
+            // mainMenu
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
+            this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemTools,
+            this.menuItemHelp});
             // 
-            // windowsToolStripMenuItem
+            // menuItemTools
             // 
-            this.windowsToolStripMenuItem.Name = "windowsToolStripMenuItem";
-            this.windowsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.windowsToolStripMenuItem.Text = "Windows";
-            this.windowsToolStripMenuItem.Click += new System.EventHandler(this.windowsToolStripMenuItem_Click);
+            this.menuItemTools.Index = 0;
+            this.menuItemTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemWindows});
+            this.menuItemTools.Text = "Tools";
+            // 
+            // menuItemWindows
+            // 
+            this.menuItemWindows.Index = 0;
+            this.menuItemWindows.Text = "Windows";
+            this.menuItemWindows.Click += new System.EventHandler(this.menuItemWindows_Click);
+            // 
+            // menuItemHelp
+            // 
+            this.menuItemHelp.Index = 1;
+            this.menuItemHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemAbout});
+            this.menuItemHelp.Text = "Help";
+            // 
+            // menuItemAbout
+            // 
+            this.menuItemAbout.Index = 0;
+            this.menuItemAbout.Text = "About";
             // 
             // MainForm
             // 
@@ -82,25 +81,21 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 606);
             this.Controls.Add(this.panelMain);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Menu = this.mainMenu;
             this.Name = "MainForm";
             this.Text = "SpyMinusMinus";
-            this.Load += new System.EventHandler(this.MainForm_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem mainMenuToolStripMenuItem;
         private System.Windows.Forms.Panel panelMain;
-        private System.Windows.Forms.ToolStripMenuItem windowsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.MainMenu mainMenu;
+        private System.Windows.Forms.MenuItem menuItemTools;
+        private System.Windows.Forms.MenuItem menuItemWindows;
+        private System.Windows.Forms.MenuItem menuItemHelp;
+        private System.Windows.Forms.MenuItem menuItemAbout;
     }
 }
 
