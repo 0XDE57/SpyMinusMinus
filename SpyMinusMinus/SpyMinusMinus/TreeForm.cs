@@ -61,7 +61,8 @@ namespace SpyMinusMinus {
             Console.WriteLine(DateTime.Now.Subtract(time).Milliseconds);
         }
 
-        private void RefreshNodes(object sender, EventArgs e) {         
+        private void RefreshNodes(object sender, EventArgs e) {
+            //TODO: switch from polling approach to global hook on WM_CREATE / WM_DESTROY?
             var time = DateTime.Now;            
             treeViewWindowList.SuspendLayout();
 
@@ -112,6 +113,8 @@ namespace SpyMinusMinus {
         }
 
         private void EnumerateWindows() {
+            //todo: use GCHandle for GC safety:
+            //docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.gchandle
             windowHandles.Clear();
             NativeMethods.EnumWindows(new NativeMethods.EnumWindowProc(EnumWindow), IntPtr.Zero);
         }
@@ -155,8 +158,17 @@ namespace SpyMinusMinus {
         }
 
         private void treeViewWindowList_DoubleClick(object sender, EventArgs e) {
-            var selected = treeViewWindowList.SelectedNode;
-            new PropertiesForm(((WindowNode)selected).GetWindow()).Show();
+            WindowNode selected = (WindowNode)treeViewWindowList.SelectedNode;
+            //new PropertiesForm(selected.GetWindow()).Show();
+            Console.WriteLine(HookWrapper.Sum(10, 5) + "");//test we can call dll
+            int test = 0;// HookWrapper.Hook(selected.Handle);
+            Console.WriteLine(test);
+
+            //Managed Debugging Assistant 'LoaderLock' has detected a problem in '...\SpyMinusMinus\bin\Debug\SpyMinusMinus.vshost.exe'.
+            //Additional information: Attempting managed execution inside OS Loader lock.Do not attempt to run managed code inside a DllMain or image 
+            //initialization function since doing so can cause the application to hang.
+            //error CS0103: The name '$exception' does not exist in the current context
+
         }
 
         private void popoutToolStripMenuItem_Click(object sender, EventArgs e) {

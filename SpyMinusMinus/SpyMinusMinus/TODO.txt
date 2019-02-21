@@ -16,7 +16,7 @@
 	[ ] allow editing
 
 [ ] message log
-	[ ] subclass main windproc and forward messages back to observer
+	[...] subclass main windproc and forward messages back to observer
 	[ ] display and log messages
 	[ ] filter
 
