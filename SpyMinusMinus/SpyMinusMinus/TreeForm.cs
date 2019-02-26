@@ -158,16 +158,17 @@ namespace SpyMinusMinus {
         }
 
         private void treeViewWindowList_DoubleClick(object sender, EventArgs e) {
-            WindowNode selected = (WindowNode)treeViewWindowList.SelectedNode;
-            //new PropertiesForm(selected.GetWindow()).Show();
-            Console.WriteLine(HookWrapper.Sum(10, 5) + "");//test we can call dll
-            int test = 0;// HookWrapper.Hook(selected.Handle);
-            Console.WriteLine(test);
+            WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
+            VirtualWindow selectedWindow = selectedNode.GetWindow();
 
-            //Managed Debugging Assistant 'LoaderLock' has detected a problem in '...\SpyMinusMinus\bin\Debug\SpyMinusMinus.vshost.exe'.
-            //Additional information: Attempting managed execution inside OS Loader lock.Do not attempt to run managed code inside a DllMain or image 
-            //initialization function since doing so can cause the application to hang.
-            //error CS0103: The name '$exception' does not exist in the current context
+            //new PropertiesForm(selectedWindow).Show();
+            Console.WriteLine("attaching to: " + selectedWindow.ToString());
+
+            MessageListener listenerWindow = new MessageListener();
+            IntPtr listener = listenerWindow.Handle;
+            int test = HookWrapper.Hook(selectedWindow.handle, listener);
+            //Console.WriteLine(test);
+
 
         }
 
@@ -180,6 +181,8 @@ namespace SpyMinusMinus {
         }
 
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
+            //TODO: if can get event based hook on create/destroy window, make this a 
+            //hard refresh (clear and rebuild tree)
             RefreshNodes(sender, e);
         }
 
