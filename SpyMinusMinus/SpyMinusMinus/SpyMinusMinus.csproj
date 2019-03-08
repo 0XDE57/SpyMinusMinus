@@ -155,11 +155,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>:: xcopy "$(SolutionDir)debug\hook.dll" "$(TargetDir)" /y /f /c /r</PostBuildEvent>
+    <PostBuildEvent>IF "$(PlatformName)" =="x86" (xcopy "$(SolutionDir)Win32\debug\hook.dll" "$(TargetDir)"  /y /f /c /r) else (xcopy "$(SolutionDir)x64\debug\hook.dll" "$(TargetDir)"  /y /f /c /r)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>::del "$(SolutionDir)debug\hook.dll" /Q /F
-::del "$(TargetDir)hook.dll" /Q /F</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

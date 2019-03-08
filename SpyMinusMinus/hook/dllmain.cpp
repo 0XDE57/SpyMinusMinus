@@ -13,7 +13,6 @@
 static bool consoleAttached = false;
 
 static const UINT WM_HOOKWNDPROC = RegisterWindowMessage(L"WM_HOOKWNDPROC");
-static const UINT WM_ALLOCCONSOLE = RegisterWindowMessage(L"WM_ALLOCCONSOLE");
 
 //#pragma data_seg(".shared")
 HHOOK hhook;
@@ -35,18 +34,18 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		case DLL_PROCESS_ATTACH:
 			dllInstance = hModule;
 
-			CreateConsole();
-			printf_s("DLL_PROCESS_ATTACH: %x \n", dllInstance);
+			//CreateConsole();
+			//printf_s("DLL_PROCESS_ATTACH: %x \n", hModule);
 			break;
 		case DLL_THREAD_ATTACH:
-			printf_s("DLL_THREAD_ATTACH\n");
+			//printf_s("DLL_THREAD_ATTACH: %x \n", hModule);
 			break;
 		case DLL_THREAD_DETACH:
-			printf_s("DLL_THREAD_DETACH\n");
+			//printf_s("DLL_THREAD_DETACH: %x \n", hModule);
 			break;
 		case DLL_PROCESS_DETACH:
-			printf_s("DLL_PROCESS_DETACH\n");
-			FreeConsole();
+			//printf_s("DLL_PROCESS_DETACH: %x \n", hModule);
+			//FreeConsole();
 			break;
 	}
 	return TRUE;
@@ -56,48 +55,54 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 
 LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {	
 
-	if (nCode < 0)  // do not process message 
+	if (nCode < 0)
 		return CallNextHookEx(NULL, nCode, wParam, lParam);
 
 
 	CWPSTRUCT* cwp = (CWPSTRUCT *)lParam;
-	//printf_s("n: %i, w:%u, l:i% \n", nCode, wParam, lParam);
-	//if (consoleAttached) {
-		printf_s("h:%i - m:%i - w:%i - l:%i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);
-	//}
 
-	//if (cwp->message == WM_ALLOCCONSOLE) { CreateConsole(); }
-	switch (cwp->message) {
-		case WM_SIZING:
-			MessageBox(cwp->hwnd, L"test", L"123", MB_OK);
+	
+	if (consoleAttached) {
+		printf_s("h:%i | m:%i | w:%i | l:%i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);		
+	}
+	
+	if (hwndListener != nullptr) {
+		//SendNotifyMessage(hwndListener, cwp->message, cwp->wParam, cwp->lParam);
+		//SendMessage(hwndListener, cwp->message, cwp->wParam, cwp->lParam);
+		//printf_s("h:%i | m:%i | w:%i | l:%i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);
+
+		COPYDATASTRUCT data;
+		data.dwData = (ULONG)hhook;
+		data.cbData = sizeof(cwp);
+		data.lpData = &cwp;
+
+		//SendMessage = blocking
+		SendMessage(hwndListener, WM_COPYDATA, 0, (LPARAM)&data);
+		//use named pipe instead?
+	}
+	
+	switch (cwp->message) {		
+		case WM_NCDESTROY: 
+			//UnhookWindowsHookEx(hhook);
+			//FreeConsole();
+			//unload ? 
+			break;
+		default:
+			//SendNotifyMessage(hwndListener, nCode, wParam, lParam); 
+			//SendMessage = blocking
+			//SendMessageTimout = blocking until timeout?
+			//PostMessage
+
+			
+			if (cwp->message == WM_HOOKWNDPROC) {
+				hwndListener = (HWND)cwp->lParam; 
+				//hwndListender = FindWindow("SpyMinusMinus")?
+				//CreateConsole();
+				//printf_s("listener: 0x%x - hhook: 0x%x\n", hwndListener, hhook);
+			}
 			break;
 	}
-	/*
-	switch (nCode)
-	{
-	/*
-	case WM_HOOKWNDPROC://static const != constant value?
-		AllocConsole();
-		AttachConsole(GetCurrentProcessId());
-		freopen_s(nullptr, "CON", "w", stdout);
-		break;
-		*
-	case WM_NCDESTROY: 
-		//UnhookWindowsHookEx(hhook);
-		//FreeConsole();
-		//unload ? 
-		break;
-	default:
-		//SendNotifyMessage(hwndListener, nCode, wParam, lParam); 
-		//SendMessage = blocking
-		//SendMessageTimout = blocking until timeout?
-		//PostMessage
-		break;
-	}*/
 
-	if (cwp->message == WM_HOOKWNDPROC) {
-		MessageBox(cwp->hwnd, L"test", L"123", MB_OK);
-	}
 
 	
 	return CallNextHookEx(NULL, nCode, wParam, lParam);
@@ -116,22 +121,15 @@ EXTERN_C __declspec(dllexport) int Hook(HWND hwndTarget, HWND hwndListener) {
 	//Method: SetWindowsHookEx()
 	SetLastError(0);
 	hhook = SetWindowsHookEx(WH_CALLWNDPROC, HookWndProc, dllInstance, GetWindowThreadProcessId(hwndTarget, NULL));
-	//hhook = SetWindowsHookEx(WH_CALLWNDPROC, HookWndProc, dllInstance, 0);
-	//hhook = SetWindowsHookEx(WH_CALLWNDPROC, HookWndProc, dllInstance, GetCurrentThreadId());
-	int error = GetLastError();
-	if (error) {
-		std::cout << "could not hook: " << error;
-		return error;
+	if (hhook == NULL) {
+		int error = GetLastError();
+		if (error) {
+			std::cout << "could not hook: " << error;
+			return error;
+		}
 	}
 
-	//LRESULT test = SendMessage(hwndTarget, WM_ALLOCCONSOLE, 0, 0);
-
 	LRESULT success = SendMessage(hwndTarget, WM_HOOKWNDPROC, WPARAM(hhook), LPARAM(hwndListener));
-	return success;
-	//CreateConsole();
 
-
-	//std::cout << "target: " << hwndTarget << " - listener: " << hwndListener << std::endl;
-	//printf_s("handle: %p", hwndTarget);
-	//return 0;
+	return (int)hhook;
 }
