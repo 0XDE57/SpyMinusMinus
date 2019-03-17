@@ -3,10 +3,8 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 #include <windows.h>
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
+
 //TODO:
 //does releasing a hook leave a dll instance loaded in the target?
 
@@ -15,8 +13,13 @@ static bool consoleAttached = false;
 static const UINT WM_HOOKWNDPROC = RegisterWindowMessage(L"WM_HOOKWNDPROC");
 
 //#pragma data_seg(".shared")
+#define BUFFSIZE 512
 HHOOK hhook;
 HWND hwndListener;
+
+LPTSTR lpszPipename = TEXT("\\\\.\\pipe\\testpipe");
+HANDLE hPipe;
+ 
 //#pragma data_seg()
 
 HINSTANCE dllInstance;
@@ -70,22 +73,43 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		//SendNotifyMessage(hwndListener, cwp->message, cwp->wParam, cwp->lParam);
 		//SendMessage(hwndListener, cwp->message, cwp->wParam, cwp->lParam);
 		//printf_s("h:%i | m:%i | w:%i | l:%i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);
-
+		/*
 		COPYDATASTRUCT data;
 		data.dwData = (ULONG)hhook;
 		data.cbData = sizeof(cwp);
 		data.lpData = &cwp;
-
+		*/
 		//SendMessage = blocking
-		SendMessage(hwndListener, WM_COPYDATA, 0, (LPARAM)&data);
-		//use named pipe instead?
+		//SendMessage(hwndListener, WM_COPYDATA, 0, (LPARAM)&data);
+		//use named pipe instead? //docs.microsoft.com/en-us/windows/desktop/ipc/named-pipe-client	
+		
+		
+		
+
+		if (hPipe != INVALID_HANDLE_VALUE) {
+	
+			DWORD cbWritten;
+			TCHAR  chBuff[BUFFSIZE];
+			LPTSTR lpvMessage = TEXT("Test message from client.");
+			DWORD  cbToWrite = (lstrlen(lpvMessage) + 1) * sizeof(TCHAR);
+			BOOL bResult = WriteFile(
+				hPipe,		// handle to pipe 
+				chBuff,		// buffer to write from 
+				cbToWrite,	// number of bytes to write, include the NULL
+				&cbWritten,	// number of bytes written 
+				NULL);		// not overlapped I/O 
+
+			
+		}
+		
 	}
 	
-	switch (cwp->message) {		
-		case WM_NCDESTROY: 
-			//UnhookWindowsHookEx(hhook);
+	switch (cwp->message) {
+		case WM_NCDESTROY:
+			UnhookWindowsHookEx(hhook);
 			//FreeConsole();
 			//unload ? 
+			CloseHandle(hPipe);
 			break;
 		default:
 			//SendNotifyMessage(hwndListener, nCode, wParam, lParam); 
@@ -99,6 +123,18 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 				//hwndListender = FindWindow("SpyMinusMinus")?
 				//CreateConsole();
 				//printf_s("listener: 0x%x - hhook: 0x%x\n", hwndListener, hhook);
+				hPipe = CreateFile(
+					lpszPipename,   // pipe name 
+					GENERIC_READ |  // read and write access 
+					GENERIC_WRITE,
+					0,              // no sharing 
+					NULL,           // default security attributes
+					OPEN_EXISTING,  // opens existing pipe 
+					0,              // default attributes 
+					NULL);          // no template file 
+
+				DWORD mode = PIPE_READMODE_MESSAGE;
+				SetNamedPipeHandleState(hPipe, &mode, nullptr, nullptr);
 			}
 			break;
 	}
@@ -124,7 +160,7 @@ EXTERN_C __declspec(dllexport) int Hook(HWND hwndTarget, HWND hwndListener) {
 	if (hhook == NULL) {
 		int error = GetLastError();
 		if (error) {
-			std::cout << "could not hook: " << error;
+			printf_s("could not hook %x", error);
 			return error;
 		}
 	}

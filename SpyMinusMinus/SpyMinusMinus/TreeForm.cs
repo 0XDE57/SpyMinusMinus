@@ -157,6 +157,7 @@ namespace SpyMinusMinus {
             showHistoryToolStripMenuItem.Checked = showHistory;
         }
 
+        
         private void treeViewWindowList_DoubleClick(object sender, EventArgs e) {
             WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
             VirtualWindow selectedWindow = selectedNode.GetWindow();

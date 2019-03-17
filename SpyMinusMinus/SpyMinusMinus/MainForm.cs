@@ -11,13 +11,16 @@ using System.Windows.Forms;
 
 namespace SpyMinusMinus {
     public partial class MainForm : Form {
-    
+
+        NamedPipe pipeMessageListener;
 
         public MainForm() {
             InitializeComponent();
         }
 
         private void MainForm_Shown(object sender, EventArgs e) {
+            pipeMessageListener = new NamedPipe();
+
             EmbedWindowTree();
         }
 
