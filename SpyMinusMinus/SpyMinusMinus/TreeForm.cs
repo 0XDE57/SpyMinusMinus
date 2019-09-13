@@ -146,19 +146,19 @@ namespace SpyMinusMinus {
         #endregion
 
         #region tool strip Options
-        private void treeViewWindowList_BeforeExpand(object sender, TreeViewCancelEventArgs e) {;
+        private void TreeViewWindowList_BeforeExpand(object sender, TreeViewCancelEventArgs e) {;
             if (e.Node != null) {
                 (e.Node as WindowNode).PopulateChildrensChildren();
             }
         }
 
-        private void showHistoryToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void ShowHistoryToolStripMenuItem_Click(object sender, EventArgs e) {
             showHistory = !showHistory;
             showHistoryToolStripMenuItem.Checked = showHistory;
         }
 
         
-        private void treeViewWindowList_DoubleClick(object sender, EventArgs e) {
+        private void TreeViewWindowList_DoubleClick(object sender, EventArgs e) {
             WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
             VirtualWindow selectedWindow = selectedNode.GetWindow();
 
@@ -170,10 +170,9 @@ namespace SpyMinusMinus {
             int test = HookWrapper.Hook(selectedWindow.handle, listener);
             //Console.WriteLine(test);
 
-
         }
 
-        private void popoutToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void PopoutToolStripMenuItem_Click(object sender, EventArgs e) {
             if (TopLevel) {
                 Embed();
             } else {
@@ -181,42 +180,42 @@ namespace SpyMinusMinus {
             }
         }
 
-        private void refreshToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void RefreshToolStripMenuItem_Click(object sender, EventArgs e) {
             //TODO: if can get event based hook on create/destroy window, make this a 
             //hard refresh (clear and rebuild tree)
             RefreshNodes(sender, e);
         }
 
         #region autoRefresh
-        private void disableAutoToolStripMenuItem_Click(object sender, EventArgs e) {
-            autoRefreshTimer.Stop();
-
+        private void UpdateStrip() {
             foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
                 if (item is ToolStripMenuItem)
                     (item as ToolStripMenuItem).Checked = false;
             }
+        }
+
+        private void DisableAutoToolStripMenuItem_Click(object sender, EventArgs e) {
+            autoRefreshTimer.Stop();
+
+            UpdateStrip();
             disableAutoToolStripMenuItem.Checked = true;
         }
 
-        private void toolStripMenuItemUpdate500_Click(object sender, EventArgs e) {
+        
+
+        private void ToolStripMenuItemUpdate500_Click(object sender, EventArgs e) {
             autoRefreshTimer.Interval = 500;
             autoRefreshTimer.Start();
-                  
-            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
-                if (item is ToolStripMenuItem)
-                    (item as ToolStripMenuItem).Checked = false;
-            }
+
+            UpdateStrip();
             toolStripMenuItemUpdate500.Checked = true;
         }
 
-        private void toolStripMenuItemUpdate1000_Click(object sender, EventArgs e) {
+        private void ToolStripMenuItemUpdate1000_Click(object sender, EventArgs e) {
             autoRefreshTimer.Interval = 1000;
             autoRefreshTimer.Start();
 
-            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
-                if (item is ToolStripMenuItem)
-                    (item as ToolStripMenuItem).Checked = false;
-            }
+            UpdateStrip();
             toolStripMenuItemUpdate1000.Checked = true;
         }
 
@@ -224,33 +223,24 @@ namespace SpyMinusMinus {
             autoRefreshTimer.Interval = 2000;
             autoRefreshTimer.Start();
 
-            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
-                if (item is ToolStripMenuItem)
-                    (item as ToolStripMenuItem).Checked = false;
-            }
+            UpdateStrip();
             toolStripMenuItemUpdate2000.Checked = true;
         }
 
-        private void toolStripMenuItemUpdate5000_Click(object sender, EventArgs e) {
+        private void ToolStripMenuItemUpdate5000_Click(object sender, EventArgs e) {
             autoRefreshTimer.Interval = 5000;
             autoRefreshTimer.Start();
 
 
-            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
-                if (item is ToolStripMenuItem)
-                    (item as ToolStripMenuItem).Checked = false;
-            }
+            UpdateStrip();
             toolStripMenuItemUpdate5000.Checked = true;
         }
 
-        private void toolStripMenuItemUpdate10000_Click(object sender, EventArgs e) {
+        private void ToolStripMenuItemUpdate10000_Click(object sender, EventArgs e) {
             autoRefreshTimer.Interval = 10000;
             autoRefreshTimer.Start();
 
-            foreach (ToolStripItem item in updateRateToolStripMenuItem.DropDownItems) {
-                if (item is ToolStripMenuItem)
-                    (item as ToolStripMenuItem).Checked = false;
-            }
+            UpdateStrip();
             toolStripMenuItemUpdate10000.Checked = true;
         }
         #endregion

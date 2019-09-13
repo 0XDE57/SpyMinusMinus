@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include <windows.h>
 #include <stdio.h>
+#include <string>
+#include <iostream>
 
 //TODO:
 //does releasing a hook leave a dll instance loaded in the target?
@@ -17,7 +19,7 @@ static const UINT WM_HOOKWNDPROC = RegisterWindowMessage(L"WM_HOOKWNDPROC");
 HHOOK hhook;
 HWND hwndListener;
 
-LPTSTR lpszPipename = TEXT("\\\\.\\pipe\\testpipe");
+LPCWSTR lpszPipename = TEXT("\\\\.\\pipe\\testpipe");
 HANDLE hPipe;
  
 //#pragma data_seg()
@@ -87,19 +89,19 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		
 
 		if (hPipe != INVALID_HANDLE_VALUE) {
-	
-			DWORD cbWritten;
-			TCHAR  chBuff[BUFFSIZE];
-			LPTSTR lpvMessage = TEXT("Test message from client.");
-			DWORD  cbToWrite = (lstrlen(lpvMessage) + 1) * sizeof(TCHAR);
-			BOOL bResult = WriteFile(
+			std::string str = "Test: " + std::to_string(cwp->message);
+
+			DWORD cbWritten;		
+			BOOL success = WriteFile(
 				hPipe,		// handle to pipe 
-				chBuff,		// buffer to write from 
-				cbToWrite,	// number of bytes to write, include the NULL
+				str.c_str(),		// buffer to write from 
+				str.size(),	// number of bytes to write, include the NULL
 				&cbWritten,	// number of bytes written 
 				NULL);		// not overlapped I/O 
 
-			
+			if (!success) {
+				std::cout << "WriteFile to pipe failed: " << GetLastError() << std::endl;
+			}
 		}
 		
 	}
@@ -123,18 +125,35 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 				//hwndListender = FindWindow("SpyMinusMinus")?
 				//CreateConsole();
 				//printf_s("listener: 0x%x - hhook: 0x%x\n", hwndListener, hhook);
-				hPipe = CreateFile(
-					lpszPipename,   // pipe name 
-					GENERIC_READ |  // read and write access 
-					GENERIC_WRITE,
+				hPipe = CreateFileW(
+					lpszPipename, 
+					GENERIC_READ | GENERIC_WRITE,
 					0,              // no sharing 
 					NULL,           // default security attributes
 					OPEN_EXISTING,  // opens existing pipe 
 					0,              // default attributes 
 					NULL);          // no template file 
 
-				DWORD mode = PIPE_READMODE_MESSAGE;
-				SetNamedPipeHandleState(hPipe, &mode, nullptr, nullptr);
+				//DWORD mode = PIPE_READMODE_MESSAGE;
+				//SetNamedPipeHandleState(hPipe, &mode, nullptr, nullptr);
+
+				if (hPipe != INVALID_HANDLE_VALUE)
+					break;
+
+
+				int lastError = GetLastError();
+				if (lastError != ERROR_PIPE_BUSY) {
+					std::cout << "Could not open pipe: " << lastError << std::endl;
+					break;
+				}
+
+				// pipe instances are busy, wait 
+				if (!WaitNamedPipe(lpszPipename, 20000)) {
+					std::cout << "Could not open pipe: 20 second wait timed out." << std::endl;
+					break;
+				}
+
+				std::cout << "Pipe Connected!" << std::endl;
 			}
 			break;
 	}

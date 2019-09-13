@@ -49,8 +49,8 @@
             this.treeViewWindowList.Name = "treeViewWindowList";
             this.treeViewWindowList.Size = new System.Drawing.Size(394, 473);
             this.treeViewWindowList.TabIndex = 1;
-            this.treeViewWindowList.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewWindowList_BeforeExpand);
-            this.treeViewWindowList.DoubleClick += new System.EventHandler(this.treeViewWindowList_DoubleClick);
+            this.treeViewWindowList.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.TreeViewWindowList_BeforeExpand);
+            this.treeViewWindowList.DoubleClick += new System.EventHandler(this.TreeViewWindowList_DoubleClick);
             // 
             // menuStripTreeMenu
             // 
@@ -92,7 +92,7 @@
             this.disableAutoToolStripMenuItem.Name = "disableAutoToolStripMenuItem";
             this.disableAutoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.disableAutoToolStripMenuItem.Text = "Disable auto";
-            this.disableAutoToolStripMenuItem.Click += new System.EventHandler(this.disableAutoToolStripMenuItem_Click);
+            this.disableAutoToolStripMenuItem.Click += new System.EventHandler(this.DisableAutoToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -104,14 +104,14 @@
             this.toolStripMenuItemUpdate500.Name = "toolStripMenuItemUpdate500";
             this.toolStripMenuItemUpdate500.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate500.Text = "500";
-            this.toolStripMenuItemUpdate500.Click += new System.EventHandler(this.toolStripMenuItemUpdate500_Click);
+            this.toolStripMenuItemUpdate500.Click += new System.EventHandler(this.ToolStripMenuItemUpdate500_Click);
             // 
             // toolStripMenuItemUpdate1000
             // 
             this.toolStripMenuItemUpdate1000.Name = "toolStripMenuItemUpdate1000";
             this.toolStripMenuItemUpdate1000.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate1000.Text = "1000";
-            this.toolStripMenuItemUpdate1000.Click += new System.EventHandler(this.toolStripMenuItemUpdate1000_Click);
+            this.toolStripMenuItemUpdate1000.Click += new System.EventHandler(this.ToolStripMenuItemUpdate1000_Click);
             // 
             // toolStripMenuItemUpdate2000
             // 
@@ -125,21 +125,21 @@
             this.toolStripMenuItemUpdate5000.Name = "toolStripMenuItemUpdate5000";
             this.toolStripMenuItemUpdate5000.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate5000.Text = "5000";
-            this.toolStripMenuItemUpdate5000.Click += new System.EventHandler(this.toolStripMenuItemUpdate5000_Click);
+            this.toolStripMenuItemUpdate5000.Click += new System.EventHandler(this.ToolStripMenuItemUpdate5000_Click);
             // 
             // toolStripMenuItemUpdate10000
             // 
             this.toolStripMenuItemUpdate10000.Name = "toolStripMenuItemUpdate10000";
             this.toolStripMenuItemUpdate10000.Size = new System.Drawing.Size(152, 22);
             this.toolStripMenuItemUpdate10000.Text = "10000";
-            this.toolStripMenuItemUpdate10000.Click += new System.EventHandler(this.toolStripMenuItemUpdate10000_Click);
+            this.toolStripMenuItemUpdate10000.Click += new System.EventHandler(this.ToolStripMenuItemUpdate10000_Click);
             // 
             // showHistoryToolStripMenuItem
             // 
             this.showHistoryToolStripMenuItem.Name = "showHistoryToolStripMenuItem";
             this.showHistoryToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.showHistoryToolStripMenuItem.Text = "Show History";
-            this.showHistoryToolStripMenuItem.Click += new System.EventHandler(this.showHistoryToolStripMenuItem_Click);
+            this.showHistoryToolStripMenuItem.Click += new System.EventHandler(this.ShowHistoryToolStripMenuItem_Click);
             // 
             // refreshToolStripMenuItem
             // 
@@ -151,7 +151,7 @@
             this.refreshToolStripMenuItem.Size = new System.Drawing.Size(28, 20);
             this.refreshToolStripMenuItem.Text = "Refresh";
             this.refreshToolStripMenuItem.ToolTipText = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.RefreshToolStripMenuItem_Click);
             // 
             // popoutToolStripMenuItem
             // 
@@ -162,7 +162,7 @@
             this.popoutToolStripMenuItem.Size = new System.Drawing.Size(28, 20);
             this.popoutToolStripMenuItem.Text = "Popout";
             this.popoutToolStripMenuItem.ToolTipText = "Pop out";
-            this.popoutToolStripMenuItem.Click += new System.EventHandler(this.popoutToolStripMenuItem_Click);
+            this.popoutToolStripMenuItem.Click += new System.EventHandler(this.PopoutToolStripMenuItem_Click);
             // 
             // TreeForm
             // 
