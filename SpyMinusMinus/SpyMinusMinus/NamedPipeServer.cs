@@ -7,28 +7,33 @@ using System.Threading;
 namespace SpyMinusMinus {
     class NamedPipeServer {
 
-        Thread serverThread;
+        private Thread serverThread;
+
+        static MessageLogForm messageLog = new MessageLogForm();
 
         public NamedPipeServer() {
+            
+            messageLog.Show();
+
             serverThread = new Thread(ServerThread);
             serverThread.Start();
         }
 
         private static void ServerThread() {
-            NamedPipeServerStream pipeServer = new NamedPipeServerStream("testpipe", PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-            Console.WriteLine("Waiting for connections....");
+            NamedPipeServerStream pipeServer = new NamedPipeServerStream("spyminuspipe", PipeDirection.InOut, 254, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
+            messageLog.Log("Waiting for connections....");
             pipeServer.WaitForConnection();
-            Console.WriteLine("Client connected on thread[{0}].", Thread.CurrentThread.ManagedThreadId);
+            messageLog.Log(string.Format("Client connected on thread[{0}].", Thread.CurrentThread.ManagedThreadId));
 
             //ReadMessageAsync(pipeServer);
             do {
-                string thing = ReadMessage(pipeServer);
-                Console.WriteLine(thing);
+                string msg = ReadMessage(pipeServer); 
+                messageLog.Log(msg);
             } while (pipeServer.IsConnected);
 
 
             pipeServer.Close();
-            Console.WriteLine("ended?");
+            messageLog.Log("pipe closed");
         }
 
         private static string ReadMessage(NamedPipeServerStream namedPipeServer) {

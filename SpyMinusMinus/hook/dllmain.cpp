@@ -1,27 +1,17 @@
-//docs.microsoft.com/en-us/windows/desktop/winmsg/using-hooks
-
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "stdafx.h"
 #include <windows.h>
 #include <stdio.h>
 #include <string>
 #include <iostream>
-
-//TODO:
-//does releasing a hook leave a dll instance loaded in the target?
+#include "NamedPipeClient.h"
 
 static bool consoleAttached = false;
-
 static const UINT WM_HOOKWNDPROC = RegisterWindowMessage(L"WM_HOOKWNDPROC");
 
 //#pragma data_seg(".shared")
-#define BUFFSIZE 512
 HHOOK hhook;
 HWND hwndListener;
-
-LPCWSTR lpszPipename = TEXT("\\\\.\\pipe\\testpipe");
-HANDLE hPipe;
- 
 //#pragma data_seg()
 
 HINSTANCE dllInstance;
@@ -57,7 +47,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 }
 
 
-
+/** Hook to intercept messages, forwards to pipe. 
+ * docs.microsoft.com/en-us/windows/desktop/winmsg/using-hooks 
+ */
 LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {	
 
 	if (nCode < 0)
@@ -70,7 +62,7 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	if (consoleAttached) {
 		printf_s("h:%i | m:%i | w:%i | l:%i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);		
 	}
-	
+	/*
 	if (hwndListener != nullptr) {
 		//SendNotifyMessage(hwndListener, cwp->message, cwp->wParam, cwp->lParam);
 		//SendMessage(hwndListener, cwp->message, cwp->wParam, cwp->lParam);
@@ -80,80 +72,27 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		data.dwData = (ULONG)hhook;
 		data.cbData = sizeof(cwp);
 		data.lpData = &cwp;
-		*/
+		*
 		//SendMessage = blocking
 		//SendMessage(hwndListener, WM_COPYDATA, 0, (LPARAM)&data);
-		//use named pipe instead? //docs.microsoft.com/en-us/windows/desktop/ipc/named-pipe-client	
-		
-		
-		
+	}*/
 
-		if (hPipe != INVALID_HANDLE_VALUE) {
-			std::string str = "Test: " + std::to_string(cwp->message);
-
-			DWORD cbWritten;		
-			BOOL success = WriteFile(
-				hPipe,		// handle to pipe 
-				str.c_str(),		// buffer to write from 
-				str.size(),	// number of bytes to write, include the NULL
-				&cbWritten,	// number of bytes written 
-				NULL);		// not overlapped I/O 
-
-			if (!success) {
-				std::cout << "WriteFile to pipe failed: " << GetLastError() << std::endl;
-			}
-		}
-		
-	}
+	SendString(std::to_string(cwp->message));
 	
 	switch (cwp->message) {
 		case WM_NCDESTROY:
+			ClosePipe();
 			UnhookWindowsHookEx(hhook);
 			//FreeConsole();
-			//unload ? 
-			CloseHandle(hPipe);
+			//unload ? 	
 			break;
-		default:
-			//SendNotifyMessage(hwndListener, nCode, wParam, lParam); 
-			//SendMessage = blocking
-			//SendMessageTimout = blocking until timeout?
-			//PostMessage
-
-			
+		default:		
 			if (cwp->message == WM_HOOKWNDPROC) {
 				hwndListener = (HWND)cwp->lParam; 
 				//hwndListender = FindWindow("SpyMinusMinus")?
 				//CreateConsole();
 				//printf_s("listener: 0x%x - hhook: 0x%x\n", hwndListener, hhook);
-				hPipe = CreateFileW(
-					lpszPipename, 
-					GENERIC_READ | GENERIC_WRITE,
-					0,              // no sharing 
-					NULL,           // default security attributes
-					OPEN_EXISTING,  // opens existing pipe 
-					0,              // default attributes 
-					NULL);          // no template file 
-
-				//DWORD mode = PIPE_READMODE_MESSAGE;
-				//SetNamedPipeHandleState(hPipe, &mode, nullptr, nullptr);
-
-				if (hPipe != INVALID_HANDLE_VALUE)
-					break;
-
-
-				int lastError = GetLastError();
-				if (lastError != ERROR_PIPE_BUSY) {
-					std::cout << "Could not open pipe: " << lastError << std::endl;
-					break;
-				}
-
-				// pipe instances are busy, wait 
-				if (!WaitNamedPipe(lpszPipename, 20000)) {
-					std::cout << "Could not open pipe: 20 second wait timed out." << std::endl;
-					break;
-				}
-
-				std::cout << "Pipe Connected!" << std::endl;
+				ConnectPipeClient();				
 			}
 			break;
 	}
@@ -179,7 +118,7 @@ EXTERN_C __declspec(dllexport) int Hook(HWND hwndTarget, HWND hwndListener) {
 	if (hhook == NULL) {
 		int error = GetLastError();
 		if (error) {
-			printf_s("could not hook %x", error);
+			std::cout << "could not hook: " << error << std::endl;
 			return error;
 		}
 	}

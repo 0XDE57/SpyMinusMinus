@@ -156,8 +156,7 @@ namespace SpyMinusMinus {
             showHistory = !showHistory;
             showHistoryToolStripMenuItem.Checked = showHistory;
         }
-
-        
+     
         private void TreeViewWindowList_DoubleClick(object sender, EventArgs e) {
             WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
             VirtualWindow selectedWindow = selectedNode.GetWindow();
@@ -167,7 +166,7 @@ namespace SpyMinusMinus {
 
             MessageListener listenerWindow = new MessageListener();
             IntPtr listener = listenerWindow.Handle;
-            int test = HookWrapper.Hook(selectedWindow.handle, listener);
+            int hook = HookWrapper.Hook(selectedWindow.handle, listener);
             //Console.WriteLine(test);
 
         }
@@ -199,9 +198,7 @@ namespace SpyMinusMinus {
 
             UpdateStrip();
             disableAutoToolStripMenuItem.Checked = true;
-        }
-
-        
+        }   
 
         private void ToolStripMenuItemUpdate500_Click(object sender, EventArgs e) {
             autoRefreshTimer.Interval = 500;
@@ -250,8 +247,6 @@ namespace SpyMinusMinus {
             autoRefreshTimer.Dispose();
             Dispose();
         }
-
-        
 
     }
 

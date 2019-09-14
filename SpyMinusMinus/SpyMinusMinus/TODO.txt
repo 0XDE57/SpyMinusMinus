@@ -1,5 +1,6 @@
 ﻿[ ] window tree
-     [ ] desktop window -> GetDesktopWindow
+     [ ] desktop window -> GetDesktopWindow 
+		what about win10 multidesktop?
      [...] tree options
          [x] auto refresh
          [x] refresh rate
