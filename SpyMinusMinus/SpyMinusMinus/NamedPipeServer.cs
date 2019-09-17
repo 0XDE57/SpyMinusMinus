@@ -27,7 +27,7 @@ namespace SpyMinusMinus {
 
             //ReadMessageAsync(pipeServer);
             do {
-                string msg = ReadMessage(pipeServer); 
+                string msg = ReadMessage(pipeServer);
                 messageLog.Log(msg);
             } while (pipeServer.IsConnected);
 

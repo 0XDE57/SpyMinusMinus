@@ -61,3 +61,31 @@ void SendString(std::string message) {
 		std::cout << "WriteFile to pipe failed: " << GetLastError() << std::endl;
 	}
 }
+
+
+void SendCWPStruct(CWPSTRUCT *cwp) {
+	if (hPipe == INVALID_HANDLE_VALUE) {
+		return;
+	}
+	printf_s("h:%i | m:%i | w:%i | l:%i --- %i & %i * %i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);
+	//TODO: serialize cwpstruct?
+	/*
+	char buffer[sizeof(*cwp)];
+	memcpy(&buffer, &cwp, sizeof(buffer));
+	for (int i = 0; i < sizeof(buffer); i++) {
+		std::cout << buffer[i];
+	}*/
+	 
+	DWORD cbWritten;	
+	BOOL success = WriteFile(
+		hPipe,			// handle to pipe 
+		reinterpret_cast<void*>(&cwp),	// buffer to write from 
+		sizeof(*cwp),	// number of bytes to write, include the NULL
+		&cbWritten,		// number of bytes written 
+		NULL);			// not overlapped I/O 
+
+	if (!success) {
+		std::cout << "WriteFile to pipe failed: " << GetLastError() << std::endl;
+	}
+}
+

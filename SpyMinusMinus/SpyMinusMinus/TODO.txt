@@ -15,7 +15,7 @@
 	[ ] allow editing
 
 [...] message log
-	[...] subclass main windproc and forward messages back to observer
+	[x] subclass main windproc and forward messages back to observer
 	[...] display and log messages
 	[ ] fix build event dll copy: a 32-bit dll must be used for 32-process, and 64 for 64: BadImageFormatException!
 		can we use IPC to dynamically load matching platform?
@@ -31,3 +31,5 @@
 [ ] find window based on mouse position 'Find Window'
 
 [ ] log window
+
+[ ] investigate: does releasing a hook leave a dll instance loaded in the target?

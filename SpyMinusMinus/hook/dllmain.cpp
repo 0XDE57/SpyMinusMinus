@@ -77,8 +77,10 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		//SendMessage(hwndListener, WM_COPYDATA, 0, (LPARAM)&data);
 	}*/
 
-	SendString(std::to_string(cwp->message));
-	
+	SendString(std::to_string((int)cwp->hwnd) + "," + std::to_string(cwp->message) + "," + std::to_string(cwp->wParam) + "," + std::to_string(cwp->lParam));
+	//SendCWPStruct(cwp);
+
+
 	switch (cwp->message) {
 		case WM_NCDESTROY:
 			ClosePipe();
@@ -90,15 +92,13 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			if (cwp->message == WM_HOOKWNDPROC) {
 				hwndListener = (HWND)cwp->lParam; 
 				//hwndListender = FindWindow("SpyMinusMinus")?
-				//CreateConsole();
+				CreateConsole();
 				//printf_s("listener: 0x%x - hhook: 0x%x\n", hwndListener, hhook);
 				ConnectPipeClient();				
 			}
 			break;
 	}
 
-
-	
 	return CallNextHookEx(NULL, nCode, wParam, lParam);
 }
 
