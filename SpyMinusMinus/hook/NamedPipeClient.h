@@ -6,4 +6,4 @@ class NamedPipeClient {};
 void ConnectPipeClient();
 void ClosePipe();
 void SendString(std::string message);
-void SendCWPStruct(CWPSTRUCT *cwp);
+void SendCWPStruct(CWPSTRUCT cwp);

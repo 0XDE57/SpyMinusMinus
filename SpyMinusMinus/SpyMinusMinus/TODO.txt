@@ -17,7 +17,9 @@
 [...] message log
 	[x] subclass main windproc and forward messages back to observer
 	[...] display and log messages
-	[ ] fix build event dll copy: a 32-bit dll must be used for 32-process, and 64 for 64: BadImageFormatException!
+		[x] send cwpstruct contents
+		[ ] multi client support
+	[x] fix build event dll copy: a 32-bit dll must be used for 32-process, and 64 for 64: BadImageFormatException!
 		can we use IPC to dynamically load matching platform?
 		//docs.microsoft.com/en-us/windows/desktop/ipc/interprocess-communications
 	[ ] filter

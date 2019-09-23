@@ -63,24 +63,24 @@ void SendString(std::string message) {
 }
 
 
-void SendCWPStruct(CWPSTRUCT *cwp) {
+void SendCWPStruct(CWPSTRUCT cwp) {
 	if (hPipe == INVALID_HANDLE_VALUE) {
 		return;
 	}
-	printf_s("h:%i | m:%i | w:%i | l:%i --- %i & %i * %i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);
-	//TODO: serialize cwpstruct?
-	/*
-	char buffer[sizeof(*cwp)];
+
+	char buffer[sizeof(cwp)];
 	memcpy(&buffer, &cwp, sizeof(buffer));
+	/*
+	std::cout << "buffer:" << buffer << " size:" << sizeof(buffer) << " &" << &buffer << std::endl;
 	for (int i = 0; i < sizeof(buffer); i++) {
-		std::cout << buffer[i];
+		std::cout << std::to_string(i) << ": " << std::hex << i << " / " << std::to_string(buffer[i]) << std::endl;
 	}*/
-	 
-	DWORD cbWritten;	
+
+	DWORD cbWritten;
 	BOOL success = WriteFile(
 		hPipe,			// handle to pipe 
-		reinterpret_cast<void*>(&cwp),	// buffer to write from 
-		sizeof(*cwp),	// number of bytes to write, include the NULL
+		reinterpret_cast<void*>(&buffer),	// buffer to write from 
+		sizeof(buffer),	// number of bytes to write, include the NULL
 		&cbWritten,		// number of bytes written 
 		NULL);			// not overlapped I/O 
 

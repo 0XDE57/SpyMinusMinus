@@ -28,19 +28,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	switch (ul_reason_for_call)	{
 		case DLL_PROCESS_ATTACH:
 			dllInstance = hModule;
-
-			//CreateConsole();
-			//printf_s("DLL_PROCESS_ATTACH: %x \n", hModule);
 			break;
 		case DLL_THREAD_ATTACH:
-			//printf_s("DLL_THREAD_ATTACH: %x \n", hModule);
 			break;
 		case DLL_THREAD_DETACH:
-			//printf_s("DLL_THREAD_DETACH: %x \n", hModule);
 			break;
 		case DLL_PROCESS_DETACH:
-			//printf_s("DLL_PROCESS_DETACH: %x \n", hModule);
-			//FreeConsole();
 			break;
 	}
 	return TRUE;
@@ -77,8 +70,9 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		//SendMessage(hwndListener, WM_COPYDATA, 0, (LPARAM)&data);
 	}*/
 
-	SendString(std::to_string((int)cwp->hwnd) + "," + std::to_string(cwp->message) + "," + std::to_string(cwp->wParam) + "," + std::to_string(cwp->lParam));
-	//SendCWPStruct(cwp);
+	//SendString(std::to_string((int)cwp->hwnd) + "," + std::to_string(cwp->message) + "," + std::to_string(cwp->wParam) + "," + std::to_string(cwp->lParam));
+	SendCWPStruct(*cwp);
+	
 
 
 	switch (cwp->message) {
@@ -91,8 +85,7 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		default:		
 			if (cwp->message == WM_HOOKWNDPROC) {
 				hwndListener = (HWND)cwp->lParam; 
-				//hwndListender = FindWindow("SpyMinusMinus")?
-				CreateConsole();
+				//CreateConsole();
 				//printf_s("listener: 0x%x - hhook: 0x%x\n", hwndListener, hhook);
 				ConnectPipeClient();				
 			}
