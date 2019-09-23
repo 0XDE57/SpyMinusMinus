@@ -11,11 +11,13 @@ using System.Windows.Forms;
 namespace SpyMinusMinus {
     public partial class PropertiesForm : Form {
 
-        private VirtualWindow currentWindow;
+        private VirtualWindow targetWindow;
 
         public PropertiesForm(VirtualWindow virtualWindow) {
             InitializeComponent();
-            this.currentWindow = virtualWindow;
+
+            targetWindow = virtualWindow;
+            //proof of concept, draw on other windows
             var g = Graphics.FromHwnd(virtualWindow.handle);
             g.DrawRectangle(Pens.Red, 0, 0, 100, 100);
             

@@ -161,14 +161,10 @@ namespace SpyMinusMinus {
             WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
             VirtualWindow selectedWindow = selectedNode.GetWindow();
 
-            //new PropertiesForm(selectedWindow).Show();
             Console.WriteLine("attaching to: " + selectedWindow.ToString());
 
-            MessageListener listenerWindow = new MessageListener();
-            IntPtr listener = listenerWindow.Handle;
-            int hook = HookWrapper.Hook(selectedWindow.handle, listener);
-            //Console.WriteLine(test);
-
+            //TODO: keep track of windows, if already open, pull forward/focus, dont make multiple
+            new WindowManager(selectedWindow);
         }
 
         private void PopoutToolStripMenuItem_Click(object sender, EventArgs e) {

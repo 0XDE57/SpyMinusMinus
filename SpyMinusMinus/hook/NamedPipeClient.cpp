@@ -73,7 +73,7 @@ void SendCWPStruct(CWPSTRUCT cwp) {
 	/*
 	std::cout << "buffer:" << buffer << " size:" << sizeof(buffer) << " &" << &buffer << std::endl;
 	for (int i = 0; i < sizeof(buffer); i++) {
-		std::cout << std::to_string(i) << ": " << std::hex << i << " / " << std::to_string(buffer[i]) << std::endl;
+		std::cout << std::to_string(i) << ": " << std::hex << buffer[i] << " / " << std::to_string(buffer[i]) << std::endl;
 	}*/
 
 	DWORD cbWritten;

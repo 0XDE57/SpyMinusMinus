@@ -61,7 +61,7 @@
             // 
             this.menuItemWindows.Index = 0;
             this.menuItemWindows.Text = "Windows";
-            this.menuItemWindows.Click += new System.EventHandler(this.menuItemWindows_Click);
+            this.menuItemWindows.Click += new System.EventHandler(this.MenuItemWindows_Click);
             // 
             // menuItemHelp
             // 
