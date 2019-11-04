@@ -17,13 +17,17 @@ namespace SpyMinusMinus {
             InitializeComponent();
 
             targetWindow = virtualWindow;
+            
+            Text = virtualWindow.ToString();
+            
+        }
+
+        private static void DrawPOC(VirtualWindow virtualWindow) {
             //proof of concept, draw on other windows
             var g = Graphics.FromHwnd(virtualWindow.handle);
             g.DrawRectangle(Pens.Red, 0, 0, 100, 100);
-            
-            g.Dispose();
-            Text = virtualWindow.ToString();
-        }
 
+            g.Dispose();
+        }
     }
 }

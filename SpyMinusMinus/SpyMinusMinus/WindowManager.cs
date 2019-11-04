@@ -16,22 +16,9 @@ namespace SpyMinusMinus {
         public WindowManager(VirtualWindow window) {
             targetWindow = window;
 
-            //InitPropertiesForm();
-            InitMessageLog();
-            Hook();
-        }
-
-
-        private void Hook() {
-            IntPtr listener = IntPtr.Zero;
-            int hook = HookWrapper.Hook(targetWindow.handle, listener);
-        }
-
-
-        private void InitMessageLog() {
-            messageForm = new MessageLogForm(targetWindow);
-            pipeMessageListener = new NamedPipeServer(messageForm);
-            messageForm.Show();
+            InitPropertiesForm();
+            //InitMessageLog();
+            
         }
 
 
@@ -39,6 +26,21 @@ namespace SpyMinusMinus {
             propertiesForm = new PropertiesForm(targetWindow);
             propertiesForm.Show();
         }
+
+
+        private void InitMessageLog() {
+            Hook();
+            messageForm = new MessageLogForm(targetWindow);
+            pipeMessageListener = new NamedPipeServer(messageForm);
+            messageForm.Show();
+        }
+
+
+        private void Hook() {
+            IntPtr listener = IntPtr.Zero;
+            int hook = HookWrapper.Hook(targetWindow.handle, listener);
+        }
+     
 
     }
 }

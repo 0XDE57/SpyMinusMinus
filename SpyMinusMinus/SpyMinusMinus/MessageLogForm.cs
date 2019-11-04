@@ -22,7 +22,11 @@ namespace SpyMinusMinus {
             log.Add(message);
             Console.WriteLine(message);
 
-            Invoke(new Action(() => AddMessage(message)));
+            if (InvokeRequired) {
+                Invoke(new Action(() => AddMessage(message)));
+            } else {
+                AddMessage(message);
+            }
         }
 
 
