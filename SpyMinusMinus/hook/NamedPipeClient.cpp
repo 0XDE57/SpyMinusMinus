@@ -7,6 +7,8 @@ LPCWSTR lpszPipename = TEXT("\\\\.\\pipe\\spyminuspipe");
 HANDLE hPipe;
 
 void ConnectPipeClient() {
+	std::cout << "Attempt connect to pipe: " << lpszPipename << std::endl;
+
 	hPipe = CreateFileW(
 		lpszPipename,
 		GENERIC_READ | GENERIC_WRITE,
@@ -19,9 +21,11 @@ void ConnectPipeClient() {
 	//DWORD mode = PIPE_READMODE_MESSAGE;
 	//SetNamedPipeHandleState(hPipe, &mode, nullptr, nullptr);
 
-	if (hPipe != INVALID_HANDLE_VALUE)
+	if (hPipe != INVALID_HANDLE_VALUE) {
+		std::cout << "Could not open pipe: INVALID_HANDLE_VALUE" << std::endl;
 		return;
-
+	}
+	
 
 	int lastError = GetLastError();
 	if (lastError != ERROR_PIPE_BUSY) {
@@ -35,7 +39,7 @@ void ConnectPipeClient() {
 		return;
 	}
 
-	std::cout << "Pipe Connected!" << std::endl;
+	std::cout << "Pipe Connected: " << hPipe << std::endl;
 }
 
 
@@ -68,14 +72,11 @@ void SendCWPStruct(CWPSTRUCT cwp) {
 		return;
 	}
 
+	//copy message contents to buffer
 	char buffer[sizeof(cwp)];
 	memcpy(&buffer, &cwp, sizeof(buffer));
-	/*
-	std::cout << "buffer:" << buffer << " size:" << sizeof(buffer) << " &" << &buffer << std::endl;
-	for (int i = 0; i < sizeof(buffer); i++) {
-		std::cout << std::to_string(i) << ": " << std::hex << buffer[i] << " / " << std::to_string(buffer[i]) << std::endl;
-	}*/
 
+	//write buffer to pipe
 	DWORD cbWritten;
 	BOOL success = WriteFile(
 		hPipe,			// handle to pipe 

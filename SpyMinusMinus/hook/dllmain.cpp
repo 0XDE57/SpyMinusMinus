@@ -16,13 +16,15 @@ HWND hwndListener;
 
 HINSTANCE dllInstance;
 
+
 void CreateConsole() {
 	if (!consoleAttached && AllocConsole()) {
 		//AttachConsole(GetCurrentProcessId());
-		freopen_s((FILE **)stdout, "CONOUT$", "w", stdout);
+		freopen_s((FILE * *)stdout, "CONOUT$", "w", stdout);
 		consoleAttached = true;
 	}
 }
+
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {	
 	switch (ul_reason_for_call)	{
@@ -38,7 +40,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	}
 	return TRUE;
 }
-
 
 /** Hook to intercept messages, forwards to pipe. 
  * docs.microsoft.com/en-us/windows/desktop/winmsg/using-hooks 
@@ -85,8 +86,9 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		default:		
 			if (cwp->message == WM_HOOKWNDPROC) {
 				hwndListener = (HWND)cwp->lParam; 
-				//CreateConsole();
-				//printf_s("listener: 0x%x - hhook: 0x%x\n", hwndListener, hhook);
+				CreateConsole();
+				int pid = GetCurrentProcessId();
+				printf_s("pid: %i | listener: 0x%p | hhook: 0x%p | dllInstance: 0x%p \n", pid, hwndListener, hhook, dllInstance);
 				ConnectPipeClient();				
 			}
 			break;
@@ -101,9 +103,10 @@ EXTERN_C __declspec(dllexport) int Hook(HWND hwndTarget, HWND hwndListener) {
 	//SetWinEventHook?
 	//CBT hook?
 
-	//WH_GETMESSAGE?
+	//WH_GETMESSAGE? called before a message reaches a window and can intercept and change the message to the window (used in the sample app
 	//WH_MSGFILTER?
 	//WH_CALLWNDPROCRET?
+	//WH_DEBUG? called before any other hooktype gets called
 
 	//Method: SetWindowsHookEx()
 	SetLastError(0);

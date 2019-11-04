@@ -7,40 +7,28 @@ using System.Threading.Tasks;
 namespace SpyMinusMinus {
     class WindowManager {
 
-        private VirtualWindow targetWindow;
-        private NamedPipeServer pipeMessageListener;
-        private MessageLogForm messageForm;
-        private PropertiesForm propertiesForm;
+        private List<VirtualWindow> windowHandles;
+        private List<VirtualWindow> previousHandles;
 
-
-        public WindowManager(VirtualWindow window) {
-            targetWindow = window;
-
-            InitPropertiesForm();
-            //InitMessageLog();
-            
+        public WindowManager() {
+            windowHandles = new List<VirtualWindow>();
+            previousHandles = new List<VirtualWindow>();
         }
 
-
-        private void InitPropertiesForm() {
-            propertiesForm = new PropertiesForm(targetWindow);
-            propertiesForm.Show();
+        private void EnumerateWindows() {
+            //todo: use GCHandle for GC safety:
+            //docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.gchandle
+            windowHandles.Clear();
+            NativeMethods.EnumWindows(new NativeMethods.EnumWindowProc(EnumWindow), IntPtr.Zero);
         }
 
-
-        private void InitMessageLog() {
-            Hook();
-            messageForm = new MessageLogForm(targetWindow);
-            pipeMessageListener = new NamedPipeServer(messageForm);
-            messageForm.Show();
+        private bool EnumWindow(IntPtr hWnd, IntPtr lParam) {
+            windowHandles.Add(new VirtualWindow(hWnd));
+            return true; //continue enumeration
         }
 
-
-        private void Hook() {
-            IntPtr listener = IntPtr.Zero;
-            int hook = HookWrapper.Hook(targetWindow.handle, listener);
+        internal List<VirtualWindow> GetWindowHandles() {
+            return windowHandles;
         }
-     
-
     }
 }

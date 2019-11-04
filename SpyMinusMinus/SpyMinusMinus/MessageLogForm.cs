@@ -14,7 +14,7 @@ namespace SpyMinusMinus {
 
             window = targetWindow;
 
-            Text += " [" + window.handle.ToString("x8") + "]";
+            Text = "Messages: " + targetWindow.ToString();
         }
 
 

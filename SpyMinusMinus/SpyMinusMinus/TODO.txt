@@ -1,20 +1,31 @@
 ﻿[ ] window tree
-     [ ] desktop window -> GetDesktopWindow 
+	[ ] search
+	[ ] processes tab
+	[ ] event based update rather than poll
+		
+    [ ] desktop window -> GetDesktopWindow 
 		what about win10 multidesktop?
-     [...] tree options
-         [x] auto refresh
-         [x] refresh rate
-         [...] history (red removed, green added)
-             [ ] tree not updated on remove
-             [ ] history needs to applied to child nodes when node expanded        
-	 [ ] always on top option
-	 [ ] transparency option
+    [...] tree options
+		[x] auto refresh
+        [x] refresh rate
+        [...] history (red removed, green added)
+			[ ] tree not updated on remove
+			[ ] history needs to applied to child nodes when node expanded        
+	[ ] always on top option
+	[ ] transparency option
      
 [...] properties window
 	[ ] display size pos, misc, thread process info, window styles
 	[ ] allow editing
 
 [...] message log
+	[ ] investigate WH_DEBUG hook:
+		WH_DEBUG: "called before any other hooktype gets called.
+		https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/ms644978(v%3Dvs.85)
+		and look at other hooks (let user choose hook type?)
+		https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/ms644978(v%3Dvs.85)
+		https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa
+		https://docs.microsoft.com/en-us/windows/win32/winmsg/using-hooks#monitoring-system-events
 	[x] subclass main windproc and forward messages back to observer
 	[x] display and log messages
 		[x] send cwpstruct contents
@@ -22,7 +33,13 @@
 	[x] fix build event dll copy
 		[ ] still doesnt copy in case of dll edit only when build will not rebuild dll and run copy event
 	[ ] a 32-bit dll must be used for 32-process, and 64 for 64: BadImageFormatException!
-		can we use IPC to dynamically load matching platform?
+		"A 32-bit DLL cannot be injected into a 64-bit process, and a 64-bit DLL cannot be injected into a 32-bit process.
+		If an application requires the use of hooks in other processes, it is required that a 32-bit application 
+		call SetWindowsHookEx to inject a 32-bit DLL into 32-bit processes, and a 64-bit application call SetWindowsHookEx
+		to inject a 64-bit DLL into 64-bit processes. The 32-bit and 64-bit DLLs must have different names."
+		https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa#remarks
+
+		can we dynamically load matching platform?
 		//docs.microsoft.com/en-us/windows/desktop/ipc/interprocess-communications
 	[ ] filter, only show messages x,y,z
 	[ ] convert message ID to human-readable name, eg:
@@ -39,7 +56,10 @@
 			xPos = GET_X_LPARAM(lParam); 
 			yPos = GET_Y_LPARAM(lParam); 
 			https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
-
+	[ ] documentation eg:
+		HWND_TOPMOST [-1] = "Places the window above all non-topmost windows. The window maintains its topmost position even when it is deactivated."
+		HWND_TOP [0] = "Places the window at the top of the Z order."
+		SWP_NOMOVE [0x0002] = "Retains the current position (ignores X and Y parameters)."
 [ ] move options to properties
 	[ ] view handles and process/thread ID's as int, hex, both
 		[ ] hex upper or lower case

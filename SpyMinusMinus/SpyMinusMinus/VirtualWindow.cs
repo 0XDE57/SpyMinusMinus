@@ -8,7 +8,13 @@ namespace SpyMinusMinus {
         public IntPtr handle;
         public IntPtr parentHandle;
         public ArrayList children;
-        private static StringBuilder sb = new StringBuilder(255);
+
+        private static readonly StringBuilder sb = new StringBuilder(255);
+
+        private PropertiesForm propertiesForm;
+        private MessageLogForm messageForm;
+        private static NamedPipeServer pipeMessageListener;
+        private bool isHooked;
 
         public string GetWindowText {
             get {
@@ -35,6 +41,41 @@ namespace SpyMinusMinus {
 
         public VirtualWindow(IntPtr handle, IntPtr parentHandle) : this(handle) {
             this.parentHandle = parentHandle;         
+        }
+
+        public void OpenPropertiesForm() {
+            if (propertiesForm == null || propertiesForm.IsDisposed) {
+                propertiesForm = new PropertiesForm(this);
+                propertiesForm.Show();
+            } else {
+                propertiesForm.BringToFront();
+                propertiesForm.Focus();
+            }
+        }
+
+
+        public void OpenMessageLog() {
+            if (!isHooked) {
+                Hook();
+            }
+
+            if (messageForm == null || messageForm.IsDisposed) {
+                messageForm = new MessageLogForm(this);
+                pipeMessageListener = new NamedPipeServer(messageForm);
+            }
+
+            messageForm.Show();
+            messageForm.Focus();
+        }
+
+
+        private void Hook() {
+            IntPtr listener = IntPtr.Zero;
+            int hook = HookWrapper.Hook(handle, listener);
+            //if (hook != 0) {//todo, verify hook
+            isHooked = true;
+            //}
+            Console.WriteLine("hook: "+ hook);
         }
 
 

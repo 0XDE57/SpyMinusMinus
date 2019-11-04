@@ -9,8 +9,10 @@ namespace SpyMinusMinus {
         
         private Panel parentPanel;
 
-        private List<VirtualWindow> windowHandles;
-        private List<VirtualWindow> previousHandles;
+
+        private List<VirtualWindow> windowHandles; //TODO: move into a window manager, not in UI
+        private List<VirtualWindow> previousHandles; //TODO: move into a window manager, not in UI
+        //private WindowManager windowManager;
         private Timer autoRefreshTimer;
 
         
@@ -29,6 +31,7 @@ namespace SpyMinusMinus {
         }
 
         private void TreeForm_Load(object sender, EventArgs e) {
+            //windowManager = new WindowManager();
             windowHandles = new List<VirtualWindow>();
             previousHandles = new List<VirtualWindow>();
 
@@ -45,6 +48,47 @@ namespace SpyMinusMinus {
             }
         }
 
+        private void TreeViewWindowList_DoubleClick(object sender, EventArgs e) {
+            WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
+            VirtualWindow selectedWindow = selectedNode.GetWindow();
+
+            Console.WriteLine("double click " + selectedWindow.ToString());
+            //selectedWindow.
+            /*
+            switch (behavior) {
+                case properties: openProperties
+                case message: openMessage
+                case show: highlight
+                case pullforward: bringToFront and Focus
+            }
+            */
+        }
+
+        private void TreeViewWindowList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e) {
+            if (e.Button == MouseButtons.Right) {
+                WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
+                if (selectedNode == null) {
+                    MessageBox.Show("NULL!");
+                    return;
+                }
+                ContextMenu cm = new ContextMenu();
+                cm.MenuItems.Add("Properties", (send, ev) => OpenProperties(send, ev, selectedNode.GetWindow()));
+                cm.MenuItems.Add("Messages", (send, ev) => OpenMessages(send, ev, selectedNode.GetWindow()));
+                treeViewWindowList.ContextMenu = cm;
+            }
+        }
+
+        private void OpenProperties(object sender, EventArgs e, VirtualWindow window) {
+            Console.WriteLine("properties: " + window.ToString());
+            window.OpenPropertiesForm();
+        }
+
+        private void OpenMessages(object sender, EventArgs e, VirtualWindow window) {
+            Console.WriteLine("messages: " + window.ToString());
+            window.OpenMessageLog();
+        }
+
+
         #region window management
         private void PopulateNodes() {
             var time = DateTime.Now;
@@ -52,7 +96,7 @@ namespace SpyMinusMinus {
             treeViewWindowList.SuspendLayout();
 
             treeViewWindowList.Nodes.Clear();
-            foreach (VirtualWindow window in windowHandles.ToArray()) {
+            foreach (VirtualWindow window in windowHandles) {
                 WindowNode windowNode = new WindowNode(window, true);
                 treeViewWindowList.Nodes.Add(windowNode);
             }
@@ -67,7 +111,7 @@ namespace SpyMinusMinus {
             treeViewWindowList.SuspendLayout();
 
             previousHandles.Clear();
-            previousHandles.AddRange(windowHandles.ToArray());
+            previousHandles.AddRange(windowHandles);
 
             EnumerateWindows();
 
@@ -145,6 +189,7 @@ namespace SpyMinusMinus {
         }
         #endregion
 
+
         #region tool strip Options
         private void TreeViewWindowList_BeforeExpand(object sender, TreeViewCancelEventArgs e) {;
             if (e.Node != null) {
@@ -157,16 +202,7 @@ namespace SpyMinusMinus {
             showHistoryToolStripMenuItem.Checked = showHistory;
         }
      
-        private void TreeViewWindowList_DoubleClick(object sender, EventArgs e) {
-            WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
-            VirtualWindow selectedWindow = selectedNode.GetWindow();
-
-            Console.WriteLine("attaching to: " + selectedWindow.ToString());
-
-            //TODO: keep track of windows, if already open, pull forward/focus, dont make multiple
-            new WindowManager(selectedWindow);
-        }
-
+       
         private void PopoutToolStripMenuItem_Click(object sender, EventArgs e) {
             if (TopLevel) {
                 Embed();
