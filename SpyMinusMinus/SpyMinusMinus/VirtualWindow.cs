@@ -13,7 +13,7 @@ namespace SpyMinusMinus {
 
         private PropertiesForm propertiesForm;
         private MessageLogForm messageForm;
-        private static NamedPipeServer pipeMessageListener;
+        private static NamedPipeServer pipeMessageListener = new NamedPipeServer();
         private bool isHooked;
 
         public string GetWindowText {
@@ -55,17 +55,20 @@ namespace SpyMinusMinus {
 
 
         public void OpenMessageLog() {
-            if (!isHooked) {
-                Hook();
-            }
-
+           
             if (messageForm == null || messageForm.IsDisposed) {
                 messageForm = new MessageLogForm(this);
-                pipeMessageListener = new NamedPipeServer(messageForm);
+                messageForm.Show();
+
+                pipeMessageListener.SpawnThread(messageForm);
+
+                if (!isHooked) {
+                    Hook();
+                }
             }
 
-            messageForm.Show();
-            messageForm.Focus();
+            //messageForm.Show();
+            //messageForm.Focus();
         }
 
 

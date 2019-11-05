@@ -66,7 +66,7 @@ namespace SpyMinusMinus {
 
         private void TreeViewWindowList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e) {
             if (e.Button == MouseButtons.Right) {
-                WindowNode selectedNode = (WindowNode)treeViewWindowList.SelectedNode;
+                WindowNode selectedNode = (WindowNode)e.Node;
                 if (selectedNode == null) {
                     MessageBox.Show("NULL!");
                     return;

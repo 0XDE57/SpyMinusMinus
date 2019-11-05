@@ -6,7 +6,8 @@
 #include <iostream>
 #include "NamedPipeClient.h"
 
-static bool consoleAttached = false;
+static bool attachConsole = false;
+static bool isConsoleAttached = false;
 static const UINT WM_HOOKWNDPROC = RegisterWindowMessage(L"WM_HOOKWNDPROC");
 
 //#pragma data_seg(".shared")
@@ -18,10 +19,10 @@ HINSTANCE dllInstance;
 
 
 void CreateConsole() {
-	if (!consoleAttached && AllocConsole()) {
+	if (!isConsoleAttached && AllocConsole()) {
 		//AttachConsole(GetCurrentProcessId());
 		freopen_s((FILE * *)stdout, "CONOUT$", "w", stdout);
-		consoleAttached = true;
+		isConsoleAttached = true;
 	}
 }
 
@@ -53,7 +54,7 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	CWPSTRUCT* cwp = (CWPSTRUCT *)lParam;
 
 	
-	if (consoleAttached) {
+	if (isConsoleAttached) {
 		printf_s("h:%i | m:%i | w:%i | l:%i\n", cwp->hwnd, cwp->message, cwp->wParam, cwp->lParam);		
 	}
 	/*
@@ -86,9 +87,11 @@ LRESULT WINAPI HookWndProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		default:		
 			if (cwp->message == WM_HOOKWNDPROC) {
 				hwndListener = (HWND)cwp->lParam; 
-				CreateConsole();
-				int pid = GetCurrentProcessId();
-				printf_s("pid: %i | listener: 0x%p | hhook: 0x%p | dllInstance: 0x%p \n", pid, hwndListener, hhook, dllInstance);
+				if (attachConsole) {
+					CreateConsole();
+					int pid = GetCurrentProcessId();
+					printf_s("pid: %i | listener: 0x%p | hhook: 0x%p | dllInstance: 0x%p \n", pid, hwndListener, hhook, dllInstance);
+				}
 				ConnectPipeClient();				
 			}
 			break;

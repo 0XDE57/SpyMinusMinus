@@ -14,7 +14,7 @@ namespace SpyMinusMinus {
 
             window = targetWindow;
 
-            Text = "Messages: " + targetWindow.ToString();
+            UpdateTitle();
         }
 
 
@@ -41,6 +41,10 @@ namespace SpyMinusMinus {
                 richTextBoxLog.ScrollToCaret();
             }
         }
-    
+
+        private void UpdateTitle() {
+            Text = "Messages: " + window.ToString();
+        }
+
     }
 }

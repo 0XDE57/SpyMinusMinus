@@ -1,8 +1,16 @@
 ﻿[ ] window tree
-	[ ] search
+	[ ] search for and filter windows by
+		[ ] handle
+		[ ] process name
+		[ ] window text
 	[ ] processes tab
 	[ ] event based update rather than poll
-		
+		approach a:
+			use a WH_CBT for HCBT_CREATEWND | HCBT_DESTROYWND?
+			https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/ms644977(v=vs.85)?redirectedfrom=MSDN
+		approach b:
+			SetWinEventHook() EVENT_OBJECT_CREATE 0x8000 | EVENT_OBJECT_DESTROY 0x8001
+			https://docs.microsoft.com/en-us/windows/win32/winauto/event-constants?redirectedfrom=MSDN
     [ ] desktop window -> GetDesktopWindow 
 		what about win10 multidesktop?
     [...] tree options
@@ -29,7 +37,9 @@
 	[x] subclass main windproc and forward messages back to observer
 	[x] display and log messages
 		[x] send cwpstruct contents
-		[x] multi pipe client support
+		[x] multi pipe client support 
+			[x] fix connection
+			[x] allow multiple clients
 	[x] fix build event dll copy
 		[ ] still doesnt copy in case of dll edit only when build will not rebuild dll and run copy event
 	[ ] a 32-bit dll must be used for 32-process, and 64 for 64: BadImageFormatException!
@@ -41,6 +51,7 @@
 
 		can we dynamically load matching platform?
 		//docs.microsoft.com/en-us/windows/desktop/ipc/interprocess-communications
+	[ ] add hook argugment for attach internal console
 	[ ] filter, only show messages x,y,z
 	[ ] convert message ID to human-readable name, eg:
 		0x0000 WM_NULL
@@ -56,13 +67,28 @@
 			xPos = GET_X_LPARAM(lParam); 
 			yPos = GET_Y_LPARAM(lParam); 
 			https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove
-	[ ] documentation eg:
+	[ ] documentation on hover over message eg:
 		HWND_TOPMOST [-1] = "Places the window above all non-topmost windows. The window maintains its topmost position even when it is deactivated."
 		HWND_TOP [0] = "Places the window at the top of the Z order."
 		SWP_NOMOVE [0x0002] = "Retains the current position (ignores X and Y parameters)."
+	[ ] networked? is this feasable, if so, is there a use case?
+		https://hackinparis.com/data/slides/2017/2017_Cohen_Gil_The_forgotten_interface_Windows_named_pipes.pdf
+
+[ ] pipe enumeration window
+	https://stackoverflow.com/questions/258701/how-can-i-get-a-list-of-all-open-named-pipes-in-windows
+	https://docs.microsoft.com/en-us/sysinternals/downloads/pipelist
+	https://stackoverflow.com/questions/25109491
+
+[ ] handle viewer / list
+	(what handles do process x have open and to what files)
+	https://docs.microsoft.com/en-us/sysinternals/downloads/handle
+[ ] possible to enumerate hooks?
+	https://stackoverflow.com/questions/8564987
 [ ] move options to properties
 	[ ] view handles and process/thread ID's as int, hex, both
 		[ ] hex upper or lower case
+
+
 
 [ ] highlighting graphics overlay rectangle
 

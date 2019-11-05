@@ -9,19 +9,13 @@ namespace SpyMinusMinus {
 
     class NamedPipeServer {
 
-        private Thread serverThread;
-        private MessageLogForm messageLog;
-
-
-        public NamedPipeServer(MessageLogForm messageForm) {
-            messageLog = messageForm;
-
-            serverThread = new Thread(ServerThread);
-            serverThread.Start();
+        public void SpawnThread(MessageLogForm messageForm) {
+            Thread thread = new Thread(() => ServerThread(messageForm));
+            thread.Start();
         }
 
-
-        private void ServerThread() {
+        private void ServerThread(object messageForm) {
+            MessageLogForm messageLog = (MessageLogForm)messageForm;
             NamedPipeServerStream pipeServer = new NamedPipeServerStream("spyminuspipe", PipeDirection.InOut, 254, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
    
             messageLog.Log("Waiting for connections....");
