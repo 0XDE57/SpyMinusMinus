@@ -7,19 +7,25 @@ using System.Threading.Tasks;
 namespace SpyMinusMinus {
     class WindowManager {
 
-        private List<VirtualWindow> windowHandles;
-        private List<VirtualWindow> previousHandles;
+        public List<VirtualWindow> windowHandles;
+        public List<VirtualWindow> previousHandles;
 
         public WindowManager() {
             windowHandles = new List<VirtualWindow>();
             previousHandles = new List<VirtualWindow>();
         }
 
-        private void EnumerateWindows() {
+        public void EnumerateWindows() {
             //todo: use GCHandle for GC safety:
             //docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.gchandle
+            previousHandles.Clear();
+            previousHandles.AddRange(windowHandles);
             windowHandles.Clear();
+
             NativeMethods.EnumWindows(new NativeMethods.EnumWindowProc(EnumWindow), IntPtr.Zero);
+
+            //windowHandles.Sort();
+            //windowHandles.ForEach(window => Console.WriteLine(window.ToString()));
         }
 
         private bool EnumWindow(IntPtr hWnd, IntPtr lParam) {

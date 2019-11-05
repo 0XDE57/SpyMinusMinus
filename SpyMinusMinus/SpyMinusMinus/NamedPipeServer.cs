@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
@@ -7,10 +8,14 @@ using System.Threading;
 
 namespace SpyMinusMinus {
 
-    class NamedPipeServer {
+    public class NamedPipeServer {
+
+        private static List<Thread> serverThreads = new List<Thread>();
 
         public void SpawnThread(MessageLogForm messageForm) {
             Thread thread = new Thread(() => ServerThread(messageForm));
+            serverThreads.Add(thread);
+
             thread.Start();
         }
 

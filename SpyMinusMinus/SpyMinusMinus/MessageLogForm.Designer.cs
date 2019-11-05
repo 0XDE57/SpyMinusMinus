@@ -47,6 +47,7 @@
             this.Controls.Add(this.richTextBoxLog);
             this.Name = "MessageLogForm";
             this.Text = "Message Log";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MessageLogForm_FormClosing);
             this.ResumeLayout(false);
 
         }

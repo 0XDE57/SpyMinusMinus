@@ -9,13 +9,9 @@ namespace SpyMinusMinus {
         
         private Panel parentPanel;
 
+        private WindowManager windowManager;
 
-        private List<VirtualWindow> windowHandles; //TODO: move into a window manager, not in UI
-        private List<VirtualWindow> previousHandles; //TODO: move into a window manager, not in UI
-        //private WindowManager windowManager;
         private Timer autoRefreshTimer;
-
-        
         private bool autoRefresh = true;
         private bool showHistory = true;
         public static int markedTime = 5000;
@@ -31,21 +27,18 @@ namespace SpyMinusMinus {
         }
 
         private void TreeForm_Load(object sender, EventArgs e) {
-            //windowManager = new WindowManager();
-            windowHandles = new List<VirtualWindow>();
-            previousHandles = new List<VirtualWindow>();
+            windowManager = new WindowManager();
+            windowManager.EnumerateWindows();
 
-            EnumerateWindows();          
-            PopulateNodes();
-
-            //windowHandles.Sort();
-            //windowHandles.ForEach(window => Console.WriteLine(window.ToString()));
+            PopulateNodes();         
 
             autoRefreshTimer = new Timer();
             autoRefreshTimer.Tick += RefreshNodes;
             if (autoRefresh) {
                 toolStripMenuItemUpdate2000.PerformClick();
             }
+
+            UpdateTitle();
         }
 
         private void TreeViewWindowList_DoubleClick(object sender, EventArgs e) {
@@ -96,27 +89,25 @@ namespace SpyMinusMinus {
             treeViewWindowList.SuspendLayout();
 
             treeViewWindowList.Nodes.Clear();
-            foreach (VirtualWindow window in windowHandles) {
+            foreach (VirtualWindow window in windowManager.GetWindowHandles()) {
                 WindowNode windowNode = new WindowNode(window, true);
                 treeViewWindowList.Nodes.Add(windowNode);
             }
 
             treeViewWindowList.ResumeLayout();
-            Console.WriteLine(DateTime.Now.Subtract(time).Milliseconds);
+            Console.WriteLine("PopulateNodes: " + DateTime.Now.Subtract(time).Milliseconds);
         }
 
         private void RefreshNodes(object sender, EventArgs e) {
             //TODO: switch from polling approach to global hook on WM_CREATE / WM_DESTROY?
-            var time = DateTime.Now;            
+            var time = DateTime.Now;
+
             treeViewWindowList.SuspendLayout();
 
-            previousHandles.Clear();
-            previousHandles.AddRange(windowHandles);
-
-            EnumerateWindows();
+            windowManager.EnumerateWindows();
 
             //new nodes
-            windowHandles.Where(w => !previousHandles.Contains(w)).ToList().ForEach(w => {
+            windowManager.windowHandles.Where(w => !windowManager.previousHandles.Contains(w)).ToList().ForEach(w => {
                 WindowNode newNode = new WindowNode(w, true);
                 if (showHistory)
                     newNode.MarkNew();
@@ -126,7 +117,7 @@ namespace SpyMinusMinus {
 
 
             //old nodes
-            previousHandles.Where(w => !windowHandles.Contains(w)).ToList().ForEach(w => {
+            windowManager.previousHandles.Where(w => !windowManager.windowHandles.Contains(w)).ToList().ForEach(w => {
                 foreach (WindowNode searchNode in treeViewWindowList.Nodes) {
                     if (searchNode.GetWindow().Equals(w)) {
                         if (showHistory) {
@@ -151,21 +142,13 @@ namespace SpyMinusMinus {
 
             treeViewWindowList.ResumeLayout();
 
-            //Console.WriteLine(DateTime.Now.Subtract(time).Milliseconds);
-
-            Text = "Windows (" + windowHandles.Count + ") - " + time.ToLongTimeString();
+            UpdateTitle();
+            Console.WriteLine("RefreshNodes: " + DateTime.Now.Subtract(time).Milliseconds);
         }
 
-        private void EnumerateWindows() {
-            //todo: use GCHandle for GC safety:
-            //docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.gchandle
-            windowHandles.Clear();
-            NativeMethods.EnumWindows(new NativeMethods.EnumWindowProc(EnumWindow), IntPtr.Zero);
-        }
-
-        private bool EnumWindow(IntPtr hWnd, IntPtr lParam) {
-            windowHandles.Add(new VirtualWindow(hWnd));
-            return true; //continue enumeration
+        private void UpdateTitle() {
+            var time = DateTime.Now;
+            Text = "Windows (" + windowManager.windowHandles.Count + ") - " + time.ToLongTimeString();
         }
 
         private void PopOut() {

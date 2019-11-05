@@ -11,15 +11,17 @@ using System.Windows.Forms;
 namespace SpyMinusMinus {
     public partial class PropertiesForm : Form {
 
-        private VirtualWindow targetWindow;
+        private VirtualWindow window;
 
         public PropertiesForm(VirtualWindow virtualWindow) {
             InitializeComponent();
 
-            targetWindow = virtualWindow;
-            
-            Text = virtualWindow.ToString();
-            
+            window = virtualWindow;
+            UpdateTitle();
+        }
+
+        private void UpdateTitle() {
+            Text = "Properties: " + window.ToString();
         }
 
         private static void DrawPOC(VirtualWindow virtualWindow) {

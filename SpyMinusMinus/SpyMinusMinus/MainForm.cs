@@ -4,26 +4,29 @@ using System.Windows.Forms;
 namespace SpyMinusMinus {
     public partial class MainForm : Form {
 
-        private TreeForm WindowTree = null;
+        private static NamedPipeServer pipeMessageListener;
 
+        public TreeForm WindowTreeForm { get; set; } = null;
 
         public MainForm() {
             InitializeComponent();
+
+            pipeMessageListener = new NamedPipeServer();
         }
 
 
         private void MainForm_Shown(object sender, EventArgs e) {
-            ShowWindowTree();           
+            ShowWindowTree();
         }
 
 
         private void ShowWindowTree() {
-            if (WindowTree == null || WindowTree.IsDisposed) {
-                WindowTree = new TreeForm(panelMain);
+            if (WindowTreeForm == null || WindowTreeForm.IsDisposed) {
+                WindowTreeForm = new TreeForm(panelMain);
             }
 
-            WindowTree.Show();
-            WindowTree.Focus();
+            WindowTreeForm.Show();
+            WindowTreeForm.Focus();
         }
 
 
@@ -31,5 +34,9 @@ namespace SpyMinusMinus {
             ShowWindowTree();
         }
         
+        public static NamedPipeServer GetNamedPipeServer() {
+            return pipeMessageListener;
+        }
+
     }
 }

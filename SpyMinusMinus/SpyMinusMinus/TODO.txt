@@ -5,6 +5,7 @@
 		[ ] window text
 	[ ] processes tab
 	[ ] event based update rather than poll
+		WM_CREATE / WM_DESTROY?
 		approach a:
 			use a WH_CBT for HCBT_CREATEWND | HCBT_DESTROYWND?
 			https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/ms644977(v=vs.85)?redirectedfrom=MSDN
@@ -51,6 +52,8 @@
 
 		can we dynamically load matching platform?
 		//docs.microsoft.com/en-us/windows/desktop/ipc/interprocess-communications
+	[ ] fix bug where closing window freezes process, some cross thread issues with UI
+	[x] fix bug when close message window while messages still being recieved = ObjectDisposedException 
 	[ ] add hook argugment for attach internal console
 	[ ] filter, only show messages x,y,z
 	[ ] convert message ID to human-readable name, eg:

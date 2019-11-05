@@ -6,21 +6,30 @@ namespace SpyMinusMinus {
     public partial class MessageLogForm : Form {
 
         private VirtualWindow window;
-        private List<string> log = new List<string>();
-
+        private List<string> log;
+        private int messageCount;
+        private volatile bool alive;
 
         public MessageLogForm(VirtualWindow targetWindow) {
             InitializeComponent();
 
             window = targetWindow;
+            log = new List<string>();
+            messageCount = 0;
+            alive = true;
 
             UpdateTitle();
         }
 
 
-        internal void Log(string message) {         
+        internal void Log(string message) {
+            //Console.WriteLine(message);
+            if (!alive) {
+                return;
+            }
+
             log.Add(message);
-            Console.WriteLine(message);
+            
 
             if (InvokeRequired) {
                 Invoke(new Action(() => AddMessage(message)));
@@ -32,19 +41,25 @@ namespace SpyMinusMinus {
 
         internal void Log(NativeMethods.CWPSTRUCT cwp) {
             Log($"h:{cwp.hwnd,-10} m:{cwp.message,-10} w:{cwp.wParam,-10} l:{cwp.lParam,-10}");
+            messageCount++;
         }
 
 
         private void AddMessage(string message) {
             richTextBoxLog.AppendText(message + "\n");
             if (!Focused) {
+                //auto scroll
                 richTextBoxLog.ScrollToCaret();
             }
         }
 
         private void UpdateTitle() {
-            Text = "Messages: " + window.ToString();
+            Text = "Messages(" + messageCount + "): " + window.ToString();
         }
 
+        private void MessageLogForm_FormClosing(object sender, FormClosingEventArgs e) {
+            //set flag to prevent ObjectDisposedException when this form is closed/closing and another thread calls log
+            alive = false;
+        }
     }
 }
