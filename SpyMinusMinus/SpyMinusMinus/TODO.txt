@@ -1,4 +1,5 @@
 ﻿[ ] window tree
+	[...] windows icon as tree node icon
 	[ ] search for and filter windows by
 		[ ] handle
 		[ ] process name
@@ -25,6 +26,9 @@
      
 [...] properties window
 	[ ] display size pos, misc, thread process info, window styles
+		GetWindowLongPtr
+		https://docs.microsoft.com/en-us/windows/win32/winmsg/window-styles
+		https://docs.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
 	[ ] allow editing
 
 [...] message log
@@ -64,9 +68,11 @@
 		0x0200 WM_MOUSEMOVE
 		https://docs.microsoft.com/en-us/windows/win32/winmsg/about-messages-and-message-queues
 		https://wiki.winehq.org/List_Of_Windows_Messages
+
+		https://www.codeproject.com/Articles/802412/Global-Interceptable-Program-and-System-Hooks-in-N
 	[ ] read message contents eg: 
 		0x0200 = WM_MOUSEMOVE
-			x,y cords are in lParam:  x-coordinate is in the low-order short of the return value; the y-coordinate is in the high-order short
+			x,y cords are in lParam: x-coordinate is in the low-order short of the return value; the y-coordinate is in the high-order short
 			xPos = GET_X_LPARAM(lParam); 
 			yPos = GET_Y_LPARAM(lParam); 
 			https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-mousemove

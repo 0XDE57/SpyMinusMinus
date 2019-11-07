@@ -10,7 +10,7 @@ namespace SpyMinusMinus {
 
         public WindowNode(VirtualWindow window) {
             this.window = window;
-            Text = window.ToString();
+            UpdateText();
         }
 
         public WindowNode(VirtualWindow window, bool populateChildren) : this(window) {
@@ -22,15 +22,13 @@ namespace SpyMinusMinus {
             return window;
         }
 
-        internal void RefreshText() {
+        internal void UpdateText() {
             Text = window.ToString();
-            //Console.WriteLine(Text);
         }
 
         public void PopulateChildNodes() {
             window.PopulateChildren();
-            //Nodes.Clear();
-            foreach (VirtualWindow child in window.children.ToArray()) {
+            foreach (VirtualWindow child in window.children) {
                 TreeNode childNode = new WindowNode(child);
                 Nodes.Add(childNode);
             }

@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.treeViewWindowList = new System.Windows.Forms.TreeView();
             this.menuStripTreeMenu = new System.Windows.Forms.MenuStrip();
             this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,6 +38,7 @@
             this.showHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.popoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageListTreeIcons = new System.Windows.Forms.ImageList(this.components);
             this.menuStripTreeMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -165,6 +167,12 @@
             this.popoutToolStripMenuItem.ToolTipText = "Pop out";
             this.popoutToolStripMenuItem.Click += new System.EventHandler(this.PopoutToolStripMenuItem_Click);
             // 
+            // imageListTreeIcons
+            // 
+            this.imageListTreeIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageListTreeIcons.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageListTreeIcons.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // TreeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,5 +207,6 @@
         private System.Windows.Forms.ToolStripMenuItem showHistoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem popoutToolStripMenuItem;
+        private System.Windows.Forms.ImageList imageListTreeIcons;
     }
 }

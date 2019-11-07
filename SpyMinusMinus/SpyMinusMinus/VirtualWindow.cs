@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Drawing;
 using System.Text;
 
 namespace SpyMinusMinus {
@@ -15,6 +16,14 @@ namespace SpyMinusMinus {
         private MessageLogForm messageForm;
         
         private bool isHooked;
+
+        public VirtualWindow(IntPtr handle) {
+            this.handle = handle;
+        }
+
+        public VirtualWindow(IntPtr handle, IntPtr parentHandle) : this(handle) {
+            this.parentHandle = parentHandle;
+        }
 
         public string GetWindowText {
             get {
@@ -33,13 +42,29 @@ namespace SpyMinusMinus {
             }
         }
 
+        public Icon GetAppIcon() {
+            /*https://codeutopia.net/blog/2007/12/18/find-an-applications-icon-with-winapi/
+            IntPtr iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL2, 0);
+            if (iconHandle == IntPtr.Zero)
+                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_SMALL, 0);
+            if (iconHandle == IntPtr.Zero)
+                iconHandle = SendMessage(hwnd, WM_GETICON, ICON_BIG, 0);
+            if (iconHandle == IntPtr.Zero)
+                iconHandle = GetClassLongPtr(hwnd, GCL_HICON);
+            if (iconHandle == IntPtr.Zero)
+                iconHandle = GetClassLongPtr(hwnd, GCL_HICONSM);
+                */
+            IntPtr iconHandle = IntPtr.Zero;
+            iconHandle = NativeMethods.GetClassLongPtr(handle, (int)NativeMethods.ClassLongFlags.GCL_HICON);
 
-        public VirtualWindow(IntPtr handle) {
-            this.handle = handle;
-        }
 
-        public VirtualWindow(IntPtr handle, IntPtr parentHandle) : this(handle) {
-            this.parentHandle = parentHandle;         
+            if (iconHandle == IntPtr.Zero)
+                return null;
+
+            Icon icn = Icon.FromHandle(iconHandle);
+
+
+            return icn;
         }
 
         public void OpenPropertiesForm() {
@@ -51,7 +76,6 @@ namespace SpyMinusMinus {
                 propertiesForm.Focus();
             }
         }
-
 
         public void OpenMessageLog() {
             if (messageForm == null || messageForm.IsDisposed) {
@@ -69,7 +93,6 @@ namespace SpyMinusMinus {
             }
         }
 
-
         private void Hook() {
             IntPtr listener = IntPtr.Zero;
             int hook = HookWrapper.Hook(handle, listener);
@@ -80,17 +103,18 @@ namespace SpyMinusMinus {
         }
 
 
+
         public void PopulateChildren() {
             children = new ArrayList();
             NativeMethods.EnumChildWindows(handle, new NativeMethods.EnumWindowProc(EnumChildWindow), handle);
         }
-
 
         private bool EnumChildWindow(IntPtr hWnd, IntPtr lParam) {
             //in this case: lParam = parent
             children.Add(new VirtualWindow(hWnd, lParam));
             return true; //continue enumeration
         }
+
 
 
         public override bool Equals(object obj) {

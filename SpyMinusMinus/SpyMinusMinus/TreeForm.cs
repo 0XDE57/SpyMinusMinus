@@ -22,6 +22,7 @@ namespace SpyMinusMinus {
             InitializeComponent();
             parentPanel = parent;
             Embed();
+            treeViewWindowList.ImageList = imageListTreeIcons;
 
             showHistoryToolStripMenuItem.Checked = showHistory;
         }
@@ -30,7 +31,18 @@ namespace SpyMinusMinus {
             windowManager = new WindowManager();
             windowManager.EnumerateWindows();
 
-            PopulateNodes();         
+            //TODO: set correct icon for tree node
+            foreach (VirtualWindow window in windowManager.windowHandles) {
+                Icon icon = window.GetAppIcon();
+                if (icon != null) {
+                    Console.WriteLine("icon added for: " + window.ToString());
+                    imageListTreeIcons.Images.Add(icon);
+                }
+            }
+
+            PopulateNodes();
+            
+            
 
             autoRefreshTimer = new Timer();
             autoRefreshTimer.Tick += RefreshNodes;
@@ -134,7 +146,7 @@ namespace SpyMinusMinus {
             foreach (WindowNode node in treeViewWindowList.Nodes) {
                 if (node.IsSelected || node.IsExpanded) {
                     //node.PopulateChildrensChildren();
-                    node.RefreshText();
+                    node.UpdateText();
                 }
                 //node.RefreshText();
                 //Console.WriteLine(node.Text);
