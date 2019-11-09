@@ -31,16 +31,20 @@ namespace SpyMinusMinus {
             windowManager = new WindowManager();
             windowManager.EnumerateWindows();
 
-            //TODO: set correct icon for tree node
+            
+            imageListTreeIcons.Images.Add("blank", new Bitmap(1, 1));
+            
             foreach (VirtualWindow window in windowManager.windowHandles) {
-                Icon icon = window.GetAppIcon();
+                Icon icon = window.GetAppIcon(); 
                 if (icon != null) {
                     Console.WriteLine("icon added for: " + window.ToString());
-                    imageListTreeIcons.Images.Add(icon);
+                    imageListTreeIcons.Images.Add(window.handle.ToString(), icon);
                 }
             }
 
             PopulateNodes();
+
+            //treeViewWindowList.Nodes.Clear();
             
             
 
@@ -95,6 +99,7 @@ namespace SpyMinusMinus {
 
 
         #region window management
+        
         private void PopulateNodes() {
             var time = DateTime.Now;
             
@@ -121,8 +126,14 @@ namespace SpyMinusMinus {
             //new nodes
             windowManager.windowHandles.Where(w => !windowManager.previousHandles.Contains(w)).ToList().ForEach(w => {
                 WindowNode newNode = new WindowNode(w, true);
-                if (showHistory)
+                Icon icon = newNode.GetIcon();
+                if (icon != null) {
+                    imageListTreeIcons.Images.Add(newNode.GetWindow().handle.ToString(), icon);
+                }
+
+                if (showHistory) {
                     newNode.MarkNew();
+                }
 
                 treeViewWindowList.Nodes.Add(newNode);
             });
@@ -135,6 +146,7 @@ namespace SpyMinusMinus {
                         if (showHistory) {
                             searchNode.MarkDead();
                         } else {
+                            imageListTreeIcons.Images.RemoveByKey(searchNode.GetWindow().handle.ToString());
                             searchNode.Remove();
                         }
                         break;
@@ -148,6 +160,7 @@ namespace SpyMinusMinus {
                     //node.PopulateChildrensChildren();
                     node.UpdateText();
                 }
+                
                 //node.RefreshText();
                 //Console.WriteLine(node.Text);
             }

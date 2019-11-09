@@ -11,7 +11,9 @@ namespace SpyMinusMinus {
         public WindowNode(VirtualWindow window) {
             this.window = window;
             UpdateText();
+            UpdateIconKey();
         }
+
 
         public WindowNode(VirtualWindow window, bool populateChildren) : this(window) {
             if (populateChildren)
@@ -24,6 +26,30 @@ namespace SpyMinusMinus {
 
         internal void UpdateText() {
             Text = window.ToString();
+        }
+
+        public Icon GetIcon() {
+            return window.GetAppIcon();
+        }
+
+        /*
+        public void UpdateIcon(ImageList.ImageCollection imageList) {
+            Icon icon = window.GetAppIcon();
+            if (icon == null) {
+                ImageKey = "blank";
+                return;
+            }
+            string key = window.handle.ToString();
+            if (!imageList.ContainsKey(key)) {
+                imageList.Add(key, icon.ToBitmap());
+                
+            }
+            UpdateIconKey();
+        }*/
+
+        private void UpdateIconKey() {
+            ImageKey = window.handle.ToString();
+            SelectedImageKey = ImageKey;
         }
 
         public void PopulateChildNodes() {
