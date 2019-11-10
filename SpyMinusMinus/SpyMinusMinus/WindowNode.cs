@@ -7,9 +7,11 @@ namespace SpyMinusMinus {
 
         private Timer markedTimer;
         private VirtualWindow window;//the window this node is mapped to
+        private bool isAlive;
 
         public WindowNode(VirtualWindow window) {
             this.window = window;
+            isAlive = true;
             UpdateText();
             UpdateIconKey();
         }
@@ -25,27 +27,14 @@ namespace SpyMinusMinus {
         }
 
         internal void UpdateText() {
+            if (!isAlive) return;
+
             Text = window.ToString();
         }
 
         public Icon GetIcon() {
             return window.GetAppIcon();
         }
-
-        /*
-        public void UpdateIcon(ImageList.ImageCollection imageList) {
-            Icon icon = window.GetAppIcon();
-            if (icon == null) {
-                ImageKey = "blank";
-                return;
-            }
-            string key = window.handle.ToString();
-            if (!imageList.ContainsKey(key)) {
-                imageList.Add(key, icon.ToBitmap());
-                
-            }
-            UpdateIconKey();
-        }*/
 
         private void UpdateIconKey() {
             ImageKey = window.handle.ToString();
@@ -68,21 +57,24 @@ namespace SpyMinusMinus {
 
         internal void MarkNew() {
             markedTimer = new Timer();
-            markedTimer.Tick += UnMark;
+            markedTimer.Tick += (s, e) => UnMark();
             markedTimer.Interval = TreeForm.markedTime;
             markedTimer.Start();
             BackColor = TreeForm.newColor;
         }
 
         internal void MarkDead() {
+            isAlive = false;
+
             markedTimer = new Timer();
-            markedTimer.Tick += (o, e) => Remove();
+            markedTimer.Tick += (s, e) => Remove();
             markedTimer.Interval = TreeForm.markedTime;
             markedTimer.Start();
+            
             BackColor = TreeForm.deadColor;
         }
 
-        internal void UnMark(object sender, EventArgs e) {
+        internal void UnMark() {
             BackColor = Color.White;
         }
 

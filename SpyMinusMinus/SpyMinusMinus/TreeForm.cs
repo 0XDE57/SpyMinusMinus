@@ -32,21 +32,10 @@ namespace SpyMinusMinus {
             windowManager.EnumerateWindows();
 
             
-            imageListTreeIcons.Images.Add("blank", new Bitmap(1, 1));
-            
-            foreach (VirtualWindow window in windowManager.windowHandles) {
-                Icon icon = window.GetAppIcon(); 
-                if (icon != null) {
-                    Console.WriteLine("icon added for: " + window.ToString());
-                    imageListTreeIcons.Images.Add(window.handle.ToString(), icon);
-                }
-            }
+            imageListTreeIcons.Images.Add("blank", new Bitmap(1, 1));                     
 
             PopulateNodes();
 
-            //treeViewWindowList.Nodes.Clear();
-            
-            
 
             autoRefreshTimer = new Timer();
             autoRefreshTimer.Tick += RefreshNodes;
@@ -77,12 +66,13 @@ namespace SpyMinusMinus {
             if (e.Button == MouseButtons.Right) {
                 WindowNode selectedNode = (WindowNode)e.Node;
                 if (selectedNode == null) {
-                    MessageBox.Show("NULL!");
                     return;
                 }
+
                 ContextMenu cm = new ContextMenu();
                 cm.MenuItems.Add("Properties", (send, ev) => OpenProperties(send, ev, selectedNode.GetWindow()));
                 cm.MenuItems.Add("Messages", (send, ev) => OpenMessages(send, ev, selectedNode.GetWindow()));
+                //cm.MenuItems.Add("Highlight");
                 treeViewWindowList.ContextMenu = cm;
             }
         }
@@ -98,17 +88,30 @@ namespace SpyMinusMinus {
         }
 
 
-        #region window management
-        
+        #region window management    
+        private void AddNewWindowNode(VirtualWindow window, bool mark) {
+            WindowNode windowNode = new WindowNode(window, true);
+
+            Icon icon = window.GetAppIcon();
+            if (icon != null) {
+                //Console.WriteLine("icon added for: " + window.ToString());
+                imageListTreeIcons.Images.Add(window.handle.ToString(), icon);
+            }
+
+            if (mark) {
+                windowNode.MarkNew();
+            }
+
+            treeViewWindowList.Nodes.Add(windowNode);
+        }
+
         private void PopulateNodes() {
-            var time = DateTime.Now;
-            
+            var time = DateTime.Now;    
             treeViewWindowList.SuspendLayout();
 
             treeViewWindowList.Nodes.Clear();
             foreach (VirtualWindow window in windowManager.GetWindowHandles()) {
-                WindowNode windowNode = new WindowNode(window, true);
-                treeViewWindowList.Nodes.Add(windowNode);
+                AddNewWindowNode(window, false);
             }
 
             treeViewWindowList.ResumeLayout();
@@ -119,32 +122,23 @@ namespace SpyMinusMinus {
             //TODO: switch from polling approach to global hook on WM_CREATE / WM_DESTROY?
             var time = DateTime.Now;
 
-            treeViewWindowList.SuspendLayout();
-
             windowManager.EnumerateWindows();
 
-            //new nodes
-            windowManager.windowHandles.Where(w => !windowManager.previousHandles.Contains(w)).ToList().ForEach(w => {
-                WindowNode newNode = new WindowNode(w, true);
-                Icon icon = newNode.GetIcon();
-                if (icon != null) {
-                    imageListTreeIcons.Images.Add(newNode.GetWindow().handle.ToString(), icon);
-                }
+            treeViewWindowList.SuspendLayout();
 
-                if (showHistory) {
-                    newNode.MarkNew();
-                }
-
-                treeViewWindowList.Nodes.Add(newNode);
+            
+            //add new nodes
+            windowManager.windowHandles.Where(w => !windowManager.previousHandles.Contains(w)).ToList().ForEach(window => {
+                AddNewWindowNode(window, showHistory);
             });
 
 
-            //old nodes
-            windowManager.previousHandles.Where(w => !windowManager.windowHandles.Contains(w)).ToList().ForEach(w => {
+            //remove old nodes
+            windowManager.previousHandles.Where(w => !windowManager.windowHandles.Contains(w)).ToList().ForEach(window => {
                 foreach (WindowNode searchNode in treeViewWindowList.Nodes) {
-                    if (searchNode.GetWindow().Equals(w)) {
+                    if (searchNode.GetWindow().Equals(window)) {
                         if (showHistory) {
-                            searchNode.MarkDead();
+                            searchNode.MarkDead();//todo: remove icon image when timer removes node.
                         } else {
                             imageListTreeIcons.Images.RemoveByKey(searchNode.GetWindow().handle.ToString());
                             searchNode.Remove();

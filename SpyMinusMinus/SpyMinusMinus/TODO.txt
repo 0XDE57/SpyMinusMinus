@@ -1,10 +1,11 @@
 ﻿[ ] window tree
-	[...] windows icon as tree node icon
+	[x] windows icon as tree node icon
 	[ ] search for and filter windows by
 		[ ] handle
 		[ ] process name
 		[ ] window text
-	[ ] processes tab
+		[ ] class text
+	[ ] processes window
 	[ ] event based update rather than poll
 		WM_CREATE / WM_DESTROY?
 		approach a:

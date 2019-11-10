@@ -54,8 +54,7 @@ namespace SpyMinusMinus {
             if (iconHandle == IntPtr.Zero)
                 iconHandle = GetClassLongPtr(hwnd, GCL_HICONSM);
                 */
-            IntPtr iconHandle = IntPtr.Zero;
-            iconHandle = NativeMethods.GetClassLongPtr(handle, (int)NativeMethods.ClassLongFlags.GCL_HICON);
+            IntPtr iconHandle = NativeMethods.GetClassLongPtr(handle, (int)NativeMethods.ClassLongFlags.GCL_HICON);
 
 
             if (iconHandle == IntPtr.Zero)
