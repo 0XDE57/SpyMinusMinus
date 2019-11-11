@@ -33,7 +33,7 @@ namespace SpyMinusMinus {
             return true; //continue enumeration
         }
 
-        internal List<VirtualWindow> GetWindowHandles() {
+        internal List<VirtualWindow> GetWindows() {
             return windowHandles;
         }
     }

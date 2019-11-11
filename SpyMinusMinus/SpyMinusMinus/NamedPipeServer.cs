@@ -34,7 +34,7 @@ namespace SpyMinusMinus {
 
 
             pipeServer.Close();
-            messageLog.Log("pipe closed");
+            messageLog.Log("===pipe closed===");
         }
 
 
@@ -42,13 +42,22 @@ namespace SpyMinusMinus {
             NativeMethods.CWPSTRUCT cwp;
             byte[] cwpStruct;
             byte[] messageBuffer = new byte[256];
-            int bytesRead;       
+            int bytesRead = 0;       
             
             do {
-                bytesRead = namedPipeServer.Read(messageBuffer, 0, messageBuffer.Length);
-                cwpStruct = new byte[bytesRead];
-                Array.Copy(messageBuffer, 0, cwpStruct, 0, bytesRead);
-                cwp = BufferToStruct<NativeMethods.CWPSTRUCT>(cwpStruct);
+                try {
+                    //get a message from the server
+                    bytesRead = namedPipeServer.Read(messageBuffer, 0, messageBuffer.Length);
+
+                    //copy message contents, parse bytes into struct
+                    cwpStruct = new byte[bytesRead];
+                    Array.Copy(messageBuffer, 0, cwpStruct, 0, bytesRead);
+                    cwp = BufferToStruct<NativeMethods.CWPSTRUCT>(cwpStruct);
+                } catch (Exception ex) {
+                    Console.WriteLine("[ERROR] Could not read message:" + ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                    return new NativeMethods.CWPSTRUCT();
+                }
             } while (!namedPipeServer.IsMessageComplete && bytesRead > 0);
 
             return cwp;

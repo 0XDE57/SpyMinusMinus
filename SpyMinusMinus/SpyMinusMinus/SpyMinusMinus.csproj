@@ -112,6 +112,12 @@
       <DependentUpon>TreeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="VirtualWindow.cs" />
+    <Compile Include="VirtualDesktopForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VirtualDesktopForm.Designer.cs">
+      <DependentUpon>VirtualDesktopForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="WindowManager.cs" />
     <Compile Include="WindowNode.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -135,6 +141,9 @@
     </Compile>
     <EmbeddedResource Include="TreeForm.resx">
       <DependentUpon>TreeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VirtualDesktopForm.resx">
+      <DependentUpon>VirtualDesktopForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

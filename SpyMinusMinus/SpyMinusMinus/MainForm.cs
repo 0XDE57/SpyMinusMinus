@@ -38,5 +38,12 @@ namespace SpyMinusMinus {
             return pipeMessageListener;
         }
 
+        private void menuItemMessageListener_Click(object sender, EventArgs e) {
+            new MessageListener();
+        }
+
+        private void menuItemDrawTest_Click(object sender, EventArgs e) {
+            new VirtualDesktopForm().Show();
+        }
     }
 }

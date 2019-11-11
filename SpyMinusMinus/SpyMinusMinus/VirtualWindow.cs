@@ -66,6 +66,11 @@ namespace SpyMinusMinus {
             return icn;
         }
 
+        public NativeMethods.RECT GetWindowRect() {
+            NativeMethods.GetWindowRect(handle, out NativeMethods.RECT windowRect);
+            return windowRect;
+        }
+
         public void OpenPropertiesForm() {
             if (propertiesForm == null || propertiesForm.IsDisposed) {
                 propertiesForm = new PropertiesForm(this);

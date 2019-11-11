@@ -13,7 +13,7 @@ namespace SpyMinusMinus {
         }
 
         protected override void WndProc(ref Message m) {
-            //Console.WriteLine($"{m.HWnd} - {m.Msg} - {m.LParam} - {m.WParam} - {m.Result}");
+            Console.WriteLine($"{m.HWnd} - {m.Msg} - {m.LParam} - {m.WParam} - {m.Result}");
             if (m.Msg == WM_COPYDATA) {
                 try {
                     //Console.WriteLine($"{m.HWnd} - {m.Msg} - {m.LParam} - {m.WParam} - {m.Result}");

@@ -110,7 +110,7 @@ namespace SpyMinusMinus {
             treeViewWindowList.SuspendLayout();
 
             treeViewWindowList.Nodes.Clear();
-            foreach (VirtualWindow window in windowManager.GetWindowHandles()) {
+            foreach (VirtualWindow window in windowManager.GetWindows()) {
                 AddNewWindowNode(window, false);
             }
 

@@ -98,7 +98,7 @@
 	[ ] view handles and process/thread ID's as int, hex, both
 		[ ] hex upper or lower case
 
-
+[...] virtual desktop render test
 
 [ ] highlighting graphics overlay rectangle
 

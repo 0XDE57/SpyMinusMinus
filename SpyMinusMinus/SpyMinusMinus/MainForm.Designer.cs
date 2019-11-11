@@ -30,6 +30,9 @@
             this.menuItemWindows = new System.Windows.Forms.MenuItem();
             this.menuItemHelp = new System.Windows.Forms.MenuItem();
             this.menuItemAbout = new System.Windows.Forms.MenuItem();
+            this.menuItemTest = new System.Windows.Forms.MenuItem();
+            this.menuItemMessageListener = new System.Windows.Forms.MenuItem();
+            this.menuItemDrawTest = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // panelMain
@@ -48,7 +51,8 @@
             // 
             this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemTools,
-            this.menuItemHelp});
+            this.menuItemHelp,
+            this.menuItemTest});
             // 
             // menuItemTools
             // 
@@ -75,6 +79,26 @@
             this.menuItemAbout.Index = 0;
             this.menuItemAbout.Text = "About";
             // 
+            // menuItemTest
+            // 
+            this.menuItemTest.Index = 2;
+            this.menuItemTest.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemMessageListener,
+            this.menuItemDrawTest});
+            this.menuItemTest.Text = "Test";
+            // 
+            // menuItemMessageListener
+            // 
+            this.menuItemMessageListener.Index = 0;
+            this.menuItemMessageListener.Text = "Message Listener Window";
+            this.menuItemMessageListener.Click += new System.EventHandler(this.menuItemMessageListener_Click);
+            // 
+            // menuItemDrawTest
+            // 
+            this.menuItemDrawTest.Index = 1;
+            this.menuItemDrawTest.Text = "DrawTest";
+            this.menuItemDrawTest.Click += new System.EventHandler(this.menuItemDrawTest_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -96,6 +120,9 @@
         private System.Windows.Forms.MenuItem menuItemWindows;
         private System.Windows.Forms.MenuItem menuItemHelp;
         private System.Windows.Forms.MenuItem menuItemAbout;
+        private System.Windows.Forms.MenuItem menuItemTest;
+        private System.Windows.Forms.MenuItem menuItemMessageListener;
+        private System.Windows.Forms.MenuItem menuItemDrawTest;
     }
 }
 
