@@ -39,7 +39,9 @@ namespace SpyMinusMinus {
         }
 
         private void menuItemMessageListener_Click(object sender, EventArgs e) {
-            new MessageListener();
+            //new MessageListener();//message only
+            //new SelfMessageLogForm().Show(); //test
+            new LogMeForm().Show();
         }
 
         private void menuItemDrawTest_Click(object sender, EventArgs e) {

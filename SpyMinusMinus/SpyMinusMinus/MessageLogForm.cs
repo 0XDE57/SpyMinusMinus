@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace SpyMinusMinus {
     public partial class MessageLogForm : Form {
 
-        private VirtualWindow window;
+        protected VirtualWindow window;
         private List<string> log;
         private int messageCount;
         private volatile bool alive;
@@ -54,7 +54,7 @@ namespace SpyMinusMinus {
         }
 
         private void UpdateTitle() {
-            Text = "Messages(" + messageCount + "): " + window.ToString();
+            Text = (window == null) ? "null" : "Messages(" + messageCount + "): " + window.ToString();          
         }
 
         private void MessageLogForm_FormClosing(object sender, FormClosingEventArgs e) {
