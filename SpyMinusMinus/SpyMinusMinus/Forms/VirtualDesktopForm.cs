@@ -7,6 +7,7 @@ namespace SpyMinusMinus {
 
         private WindowManager windowManager;
 
+        bool showBorder;
         private Rectangle virtualDesktop, scaledDesktop;
         private float scale;
 
@@ -22,8 +23,11 @@ namespace SpyMinusMinus {
             }
             Console.WriteLine("Virtual screen: " + SystemInformation.VirtualScreen);
             //todo: handle multiply monitors and window placement 
-            //virtualDesktop = new Rectangle(, 0, SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
-            virtualDesktop = new Rectangle(0, 0, screens[0].Bounds.Width, screens[0].Bounds.Height);
+            //
+            //virtualDesktop = new Rectangle(0, 0, SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
+            virtualDesktop = new Rectangle(0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            //virtualDesktop = new Rectangle(0, 0, 1920, 1080);//defualt 
+            
             ResizeDesktop();
 
 
@@ -41,17 +45,16 @@ namespace SpyMinusMinus {
             //var time = DateTime.Now;
 
             windowManager.EnumerateWindows();
-
-            
+          
             g.FillRectangle(Brushes.White, ClientRectangle);
             g.DrawRectangle(Pens.DarkGray, DisplayRectangle);
-
             
             g.FillRectangle(Brushes.Black, scaledDesktop);
             g.DrawRectangle(Pens.White, scaledDesktop);
             g.DrawEllipse(Pens.DarkGray, scaledDesktop);
 
             /*
+            //test render find notepad
             VirtualWindow window = windowManager.GetWindows().Find(w => w.GetWindowText.Contains("Untitled - Notepad"));
             if (window != null) {
                 NativeMethods.RECT windowRect = window.GetWindowRect();
@@ -63,11 +66,7 @@ namespace SpyMinusMinus {
             foreach (VirtualWindow window in windowManager.GetWindows()) {
                 NativeMethods.RECT windowRect = window.GetWindowRect();
                 Rectangle scaledWindow = ScaleWindowToVirtualDesktop(windowRect, scaledDesktop, scale);
-
                 g.DrawRectangle(Pens.Red, scaledWindow);
-
-                //Random rng = new Random();
-                //g.DrawRectangle(new Pen(Color.FromArgb(rng.Next(255), rng.Next(255), rng.Next(255))), scaledWindow);
             }
 
             //Console.WriteLine("update & render: " + DateTime.Now.Subtract(time).Milliseconds);
@@ -84,7 +83,7 @@ namespace SpyMinusMinus {
             scaledRect.Height = (int)(scaledRect.Height * desktopScale);
 
             //offset position based on desktop location
-            scaledRect.X += desktopRect.X;// - scaledRect.Width;
+            scaledRect.X += desktopRect.X;
             scaledRect.Y += desktopRect.Y - scaledRect.Height;
 
             return scaledRect;
@@ -124,7 +123,7 @@ namespace SpyMinusMinus {
             return screens;
         }
 
-        bool showBorder;
+        
         private void VirtualDesktopForm_MouseDoubleClick(object sender, MouseEventArgs e) {
             showBorder = !showBorder;
             FormBorderStyle = showBorder ? FormBorderStyle.Sizable : FormBorderStyle.None;

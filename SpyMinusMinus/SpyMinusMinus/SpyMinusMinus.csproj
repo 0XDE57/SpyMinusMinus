@@ -82,63 +82,69 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HookWrapper.cs" />
-    <Compile Include="LogMeForm.cs">
+    <Compile Include="Forms\LogMeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LogMeForm.Designer.cs">
+    <Compile Include="Forms\LogMeForm.Designer.cs">
       <DependentUpon>LogMeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MessageListener.cs" />
-    <Compile Include="MessageLogForm.cs">
+    <Compile Include="Forms\MessageLogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MessageLogForm.Designer.cs">
+    <Compile Include="Forms\MessageLogForm.Designer.cs">
       <DependentUpon>MessageLogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NamedPipeServer.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="PropertiesForm.cs">
+    <Compile Include="Forms\PropertiesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PropertiesForm.Designer.cs">
+    <Compile Include="Forms\PropertiesForm.Designer.cs">
       <DependentUpon>PropertiesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelfMessageLogForm.cs">
+    <Compile Include="Forms\SelfMessageLogForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TreeForm.cs">
+    <Compile Include="Forms\SendMessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TreeForm.Designer.cs">
+    <Compile Include="Forms\SendMessageForm.Designer.cs">
+      <DependentUpon>SendMessageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TreeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TreeForm.Designer.cs">
       <DependentUpon>TreeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="VirtualWindow.cs" />
-    <Compile Include="VirtualDesktopForm.cs">
+    <Compile Include="Forms\VirtualDesktopForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VirtualDesktopForm.Designer.cs">
+    <Compile Include="Forms\VirtualDesktopForm.Designer.cs">
       <DependentUpon>VirtualDesktopForm.cs</DependentUpon>
     </Compile>
     <Compile Include="WindowManager.cs" />
     <Compile Include="WindowNode.cs" />
-    <EmbeddedResource Include="LogMeForm.resx">
+    <EmbeddedResource Include="Forms\LogMeForm.resx">
       <DependentUpon>LogMeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MessageLogForm.resx">
+    <EmbeddedResource Include="Forms\MessageLogForm.resx">
       <DependentUpon>MessageLogForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertiesForm.resx">
+    <EmbeddedResource Include="Forms\PropertiesForm.resx">
       <DependentUpon>PropertiesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -151,10 +157,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TreeForm.resx">
+    <EmbeddedResource Include="Forms\TreeForm.resx">
       <DependentUpon>TreeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="VirtualDesktopForm.resx">
+    <EmbeddedResource Include="Forms\VirtualDesktopForm.resx">
       <DependentUpon>VirtualDesktopForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">

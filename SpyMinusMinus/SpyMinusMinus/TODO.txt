@@ -30,7 +30,10 @@
 		GetWindowLongPtr
 		https://docs.microsoft.com/en-us/windows/win32/winmsg/window-styles
 		https://docs.microsoft.com/en-us/windows/win32/winmsg/extended-window-styles
-	[ ] allow editing
+	[ ] allow editing of any property
+		eg: add or remove window flags
+		change window position and size
+
 
 [...] message log
 	[ ] investigate WH_DEBUG hook:
@@ -103,11 +106,14 @@
 	[ ] multi-monitor handling & physical monitor placement
 		[ ] window location needs to be mapped to screen, not always re
 	[ ] color coding for status and flags
+		eg: if window has flag WS_VISIBLE, make it pink
 	[ ] transparent filled rect render
 	[ ] ensure window order rendering respects z-level
 	[ ] display text
 	[ ] mouse over/in window event
-		
+
+[ ] send message
+	[ ] send any message to any window
 
 [ ] highlighting graphics overlay rectangle
 
@@ -115,5 +121,6 @@
 
 [ ] log window
 
-[ ] investigate: does releasing a hook leave a dll instance loaded in the target?
+[ ] investigate: 
+	[ ] does releasing a hook leave a dll instance loaded in the target?
 	[ ] set arbitrary window parents, eg embed window into another?

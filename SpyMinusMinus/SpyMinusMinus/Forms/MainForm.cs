@@ -29,22 +29,25 @@ namespace SpyMinusMinus {
             WindowTreeForm.Focus();
         }
 
-
-        private void MenuItemWindows_Click(object sender, EventArgs e) {
-            ShowWindowTree();
-        }
-        
         public static NamedPipeServer GetNamedPipeServer() {
             return pipeMessageListener;
         }
 
+
+
+        private void MenuItemWindows_Click(object sender, EventArgs e) {
+            ShowWindowTree();
+        }
+
         private void menuItemMessageListener_Click(object sender, EventArgs e) {
+            //test log messages
             //new MessageListener();//message only
             //new SelfMessageLogForm().Show(); //test
             new LogMeForm().Show();
         }
 
         private void menuItemDrawTest_Click(object sender, EventArgs e) {
+            //test draw virtual desktop
             new VirtualDesktopForm().Show();
         }
     }
