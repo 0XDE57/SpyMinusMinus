@@ -1,4 +1,7 @@
-﻿[ ] window tree
+﻿[ ] todo, better name. not quite happy with it and dont want to invite legal trouble
+	OpenSpy?
+	
+[ ] window tree
 	[x] windows icon as tree node icon
 	[ ] search for and filter windows by
 		[ ] handle
@@ -124,3 +127,6 @@
 [ ] investigate: 
 	[ ] does releasing a hook leave a dll instance loaded in the target?
 	[ ] set arbitrary window parents, eg embed window into another?
+
+[ ] can we auto detect graphics lib? and hook those too?
+	https://github.com/alxbrn/universal-graphics-hook

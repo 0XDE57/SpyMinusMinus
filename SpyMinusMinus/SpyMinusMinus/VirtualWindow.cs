@@ -6,8 +6,8 @@ using System.Text;
 namespace SpyMinusMinus {
     public class VirtualWindow : IComparable {
 
-        public IntPtr handle;
-        public IntPtr parentHandle;
+        public IntPtr handle = IntPtr.Zero;
+        public IntPtr parentHandle = IntPtr.Zero;
         public ArrayList children;
 
         private static readonly StringBuilder sb = new StringBuilder(255);
@@ -54,15 +54,12 @@ namespace SpyMinusMinus {
             if (iconHandle == IntPtr.Zero)
                 iconHandle = GetClassLongPtr(hwnd, GCL_HICONSM);
                 */
+
             IntPtr iconHandle = NativeMethods.GetClassLongPtr(handle, (int)NativeMethods.ClassLongFlags.GCL_HICON);
-
-
             if (iconHandle == IntPtr.Zero)
                 return null;
 
             Icon icn = Icon.FromHandle(iconHandle);
-
-
             return icn;
         }
 
@@ -98,8 +95,10 @@ namespace SpyMinusMinus {
         }
 
         private void Hook() {
-            IntPtr listener = IntPtr.Zero;
-            int hook = HookWrapper.Hook(handle, listener);
+            if (handle == IntPtr.Zero)
+                return;
+
+            int hook = HookWrapper.Hook(handle, IntPtr.Zero);
             //if (hook != 0) {//todo, verify hook
             isHooked = true;
             //}
@@ -131,16 +130,13 @@ namespace SpyMinusMinus {
             return false;
         }
 
-
         public int CompareTo(object obj) {
             return ((int)handle - (int)(obj as VirtualWindow).handle);
         }
 
-
         public override int GetHashCode() {
             return base.GetHashCode();
         }
-
 
         public override string ToString() {
             return handle.ToString("x8") + " \"" + GetWindowText + "\" " + GetWindowClass;
