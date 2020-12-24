@@ -1,5 +1,5 @@
-﻿[ ] todo, better name. not quite happy with it and dont want to invite legal trouble
-	OpenSpy?
+﻿[ ] ditch my custom hooks for detours? (why am i reinvent wheel)
+	https://github.com/Microsoft/Detours
 	
 [ ] window tree
 	[x] windows icon as tree node icon
@@ -130,3 +130,5 @@
 
 [ ] can we auto detect graphics lib? and hook those too?
 	https://github.com/alxbrn/universal-graphics-hook
+
+[ ] todo, better name?
